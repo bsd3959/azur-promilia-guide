@@ -13,16 +13,17 @@
     :root {
       --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 
-      /* Base Surfaces (Reference Light Clarity) */
-      --bg-canvas: #f3f6fd;
-      --bg-surface: #ffffff;
-      --bg-surface-soft: #eef3fc;
-      --bg-surface-hover: #f8faff;
-      --bg-hero-veil-top: rgba(243, 246, 253, 0.72);
-      --bg-hero-veil-mid: rgba(243, 246, 253, 0.88);
-      --bg-hero-veil-bot: #f3f6fd;
-      --bg-nav: rgba(255, 255, 255, 0.9);
-      --bg-modal: rgba(15, 23, 42, 0.76);
+      /* Base Surfaces (Reference Light Clarity + Frosted Glass over Wallpaper) */
+      --bg-canvas: #eef3fc;
+      --bg-surface: rgba(255, 255, 255, 0.90);
+      --bg-surface-solid: #ffffff;
+      --bg-surface-soft: rgba(238, 243, 252, 0.88);
+      --bg-surface-hover: rgba(255, 255, 255, 0.98);
+      --bg-hero-veil-top: rgba(243, 246, 253, 0.42);
+      --bg-hero-veil-mid: rgba(243, 246, 253, 0.62);
+      --bg-hero-veil-bot: rgba(243, 246, 253, 0.78);
+      --bg-nav: rgba(255, 255, 255, 0.88);
+      --bg-modal: rgba(15, 23, 42, 0.72);
       --bg-toast: #172554;
 
       /* Borders & Filigree */
@@ -115,17 +116,17 @@
       inset: 0;
       background-image: url('https://azurpromilia-web.dn.nexoncdn.co.kr/events/2025/1215_preregistration_A23C27F10386720E/meta.jpg');
       background-size: cover;
-      background-position: center 14%;
-      opacity: 0.14;
-      filter: saturate(1.1) contrast(0.95);
+      background-position: center top;
+      opacity: 0.42;
+      filter: saturate(1.12) contrast(1.02);
     }
     .world-backdrop-veil {
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 14% 12%, rgba(75, 99, 242, 0.09), transparent 38%),
-        radial-gradient(circle at 86% 10%, rgba(14, 165, 233, 0.09), transparent 36%),
-        linear-gradient(180deg, var(--bg-hero-veil-top) 0%, var(--bg-hero-veil-mid) 34%, var(--bg-hero-veil-bot) 68%);
+        radial-gradient(circle at 12% 10%, rgba(75, 99, 242, 0.12), transparent 40%),
+        radial-gradient(circle at 88% 14%, rgba(14, 165, 233, 0.14), transparent 40%),
+        linear-gradient(180deg, var(--bg-hero-veil-top) 0%, var(--bg-hero-veil-mid) 45%, var(--bg-hero-veil-bot) 100%);
     }
     .world-dots {
       position: absolute;
@@ -785,6 +786,7 @@
     }
     .db-group {
       background: var(--bg-surface);
+      backdrop-filter: blur(10px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
       padding: 20px;
@@ -809,6 +811,203 @@
     .db-key { font-size: 0.82rem; color: var(--ink-muted); font-weight: 700; }
     .db-val { font-size: 0.96rem; font-weight: 800; color: var(--ink-strong); margin: 3px 0; }
     .db-note { font-size: 0.82rem; color: var(--ink-body); }
+
+    /* Interactive Wiki Row & Detailed Guide Modal */
+    .wiki-row-btn {
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 12px 12px;
+      margin: 4px 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+    }
+    .wiki-row-btn:hover {
+      background: var(--bg-surface-soft);
+      border-color: var(--border-brand);
+      transform: translateX(2px);
+    }
+    .wiki-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .wiki-row-hint {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--brand-blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .guide-modal-panel {
+      width: min(860px, 95vw);
+      max-height: 88vh;
+      overflow-y: auto;
+      background: var(--bg-surface-solid);
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 26px 28px 28px;
+      position: relative;
+    }
+    .guide-modal-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--brand-blue);
+      border-top-left-radius: var(--radius-xl);
+      border-top-right-radius: var(--radius-xl);
+    }
+    .guide-modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 18px;
+    }
+    .guide-modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+      letter-spacing: -0.02em;
+      margin: 8px 0 4px;
+    }
+    .guide-modal-summary {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--brand-blue-deep);
+    }
+    .guide-section {
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-surface-soft);
+      border: 1px solid var(--border-subtle);
+    }
+    .guide-section:last-child { margin-bottom: 0; }
+    .guide-section-title {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .guide-section-body {
+      font-size: 0.88rem;
+      color: var(--ink-body);
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+    /* Party Node Chain (1 -> 2 -> 3 with Alternative Chips) */
+    .party-nodes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      position: relative;
+    }
+    .party-node {
+      background: var(--bg-surface-solid);
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 13px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+    .party-node-num {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--brand-blue-deep);
+    }
+    .party-node-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--radius-pill);
+      background: var(--brand-blue);
+      color: var(--ink-inverse);
+      display: grid;
+      place-items: center;
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+    .party-node-main {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+    }
+    .party-node-alts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 2px;
+    }
+    .alt-chip {
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue-deep);
+      border: 1px solid var(--border-subtle);
+    }
+    /* Skill Rotation Steps */
+    .rotation-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .rotation-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg-surface-solid);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 0.86rem;
+      color: var(--ink-body);
+    }
+    .rotation-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-pill);
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue-deep);
+      font-size: 0.76rem;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+    .pending-box {
+      border: 1.5px dashed var(--border-strong);
+      background: var(--bg-surface-solid);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+    }
+    .pending-box strong { color: var(--brand-blue-deep); }
 
     /* Filter Chips */
     .filter-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
@@ -1349,7 +1548,7 @@
         <div class="section-head">
           <div>
             <div class="section-title">공략 백과 DB</div>
-            <div class="section-sub">게임 용어, 속성 조합, 파밍과 육성 핵심 팁이 누적되는 검색 전용 백과</div>
+            <div class="section-sub">각 항목을 클릭하면 추천 파티 노드(대체 캐릭터 포함), 전투 메커니즘, 스킬 사이클, 육성·세팅 상세 공략이 열립니다.</div>
           </div>
         </div>
         <div class="db-sections" id="wikiDbGrid"></div>
@@ -1393,6 +1592,9 @@
 
   <div id="lightbox" class="modal" onclick="this.classList.remove('open')">
     <img id="lightboxImg" src="" alt="스크랩 이미지 확대 미리보기" />
+  </div>
+  <div id="guideModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle" onclick="if (event.target === this) closeGuideModal()">
+    <div class="guide-modal-panel" id="guideModalContent"></div>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
@@ -1652,14 +1854,176 @@
       `).join("");
     }
 
+    function hasDetailedGuide(it) {
+      return Boolean(
+        (it.PartyNodes && it.PartyNodes.trim()) ||
+        (it.Mechanism && it.Mechanism.trim()) ||
+        (it.SkillRotation && it.SkillRotation.trim()) ||
+        (it.GrowthGuide && it.GrowthGuide.trim()) ||
+        (it.GearSetup && it.GearSetup.trim())
+      );
+    }
+
+    function parsePartyNodesHtml(raw) {
+      const slots = String(raw || "").split("|").map(s => s.trim()).filter(Boolean);
+      if (!slots.length) return "";
+      return `<div class="party-nodes">` + slots.map((slot, idx) => {
+        let altText = "";
+        let mainPart = slot;
+        const altMatch = slot.match(/\[대체\s*:\s*([^\]]+)\]/);
+        if (altMatch) {
+          altText = altMatch[1].trim();
+          mainPart = slot.replace(altMatch[0], "").trim();
+        }
+        let roleLabel = `${idx + 1}번 자리`;
+        let charName = mainPart;
+        const colonIdx = mainPart.indexOf(":");
+        if (colonIdx !== -1) {
+          roleLabel = mainPart.slice(0, colonIdx).trim();
+          charName = mainPart.slice(colonIdx + 1).trim();
+        }
+        const alts = altText ? altText.split(/[,/]/).map(a => a.trim()).filter(Boolean) : [];
+        return `
+          <div class="party-node">
+            <div class="party-node-num">
+              <span class="party-node-dot">${idx + 1}</span>
+              <span>${escapeHtml(roleLabel)}</span>
+            </div>
+            <div class="party-node-main">${escapeHtml(charName)}</div>
+            ${alts.length ? `<div class="party-node-alts">${alts.map(a => `<span class="alt-chip">대체: ${escapeHtml(a)}</span>`).join("")}</div>` : ""}
+          </div>
+        `;
+      }).join("") + `</div>`;
+    }
+
+    function parseRotationHtml(raw) {
+      const steps = String(raw || "").split(/\s*(?:→|->|=>|\n)\s*/).map(s => s.trim()).filter(Boolean);
+      if (!steps.length) return "";
+      return `<div class="rotation-steps">` + steps.map((st, idx) => `
+        <div class="rotation-step">
+          <span class="rotation-num">${idx + 1}</span>
+          <span>${escapeHtml(st)}</span>
+        </div>
+      `).join("") + `</div>`;
+    }
+
+    function openGuideModal(wikiIdx) {
+      const rows = DB.Game_Wiki_DB || [];
+      const it = rows[wikiIdx];
+      if (!it) return;
+      const detailed = hasDetailedGuide(it);
+      const statusText = (it.VerifiedStatus && it.VerifiedStatus.trim()) || (detailed ? "공략화 완료" : "기초 요약 · 공략화 대기");
+      const statusCls = detailed ? "pill-free" : "pill-warn";
+
+      let sectionsHtml = `
+        <div class="guide-section">
+          <div class="guide-section-title">핵심 개요</div>
+          <div class="guide-section-body">${escapeHtml(it.Detail || it.Summary || "내용이 없습니다.")}</div>
+        </div>
+      `;
+
+      if (it.PartyNodes && it.PartyNodes.trim()) {
+        sectionsHtml += `
+          <div class="guide-section">
+            <div class="guide-section-title">추천 파티 구성 &amp; 대체 캐릭터 노드</div>
+            ${parsePartyNodesHtml(it.PartyNodes)}
+          </div>
+        `;
+      }
+      if (it.Mechanism && it.Mechanism.trim()) {
+        sectionsHtml += `
+          <div class="guide-section">
+            <div class="guide-section-title">전투 메커니즘</div>
+            <div class="guide-section-body">${escapeHtml(it.Mechanism)}</div>
+          </div>
+        `;
+      }
+      if (it.SkillRotation && it.SkillRotation.trim()) {
+        sectionsHtml += `
+          <div class="guide-section">
+            <div class="guide-section-title">스킬 사용 순서 (사이클)</div>
+            ${parseRotationHtml(it.SkillRotation)}
+          </div>
+        `;
+      }
+      if (it.GrowthGuide && it.GrowthGuide.trim()) {
+        sectionsHtml += `
+          <div class="guide-section">
+            <div class="guide-section-title">육성 우선순위</div>
+            <div class="guide-section-body">${escapeHtml(it.GrowthGuide)}</div>
+          </div>
+        `;
+      }
+      if (it.GearSetup && it.GearSetup.trim()) {
+        sectionsHtml += `
+          <div class="guide-section">
+            <div class="guide-section-title">장비 · 영자 · 키보 세팅</div>
+            <div class="guide-section-body">${escapeHtml(it.GearSetup)}</div>
+          </div>
+        `;
+      }
+
+      if (!detailed) {
+        sectionsHtml += `
+          <div class="pending-box">
+            <strong>상세 공략화 대기 항목입니다.</strong><br/>
+            안티그래비티 또는 제미나이 PC앱(Neon)에서 <strong>"${escapeHtml(it.Keyword)} 공략화해줘"</strong>라고 요청해 구글 시트(<code>Game_Wiki_DB</code>)에 상세 컬럼을 채우면, 이 창에 추천 파티 노드·대체 캐릭터·스킬 사이클·육성·장비 세팅이 즉시 표시됩니다.
+          </div>
+        `;
+      }
+
+      document.getElementById("guideModalContent").innerHTML = `
+        <div class="guide-modal-head">
+          <div style="min-width:0;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <span class="pill pill-rec">${escapeHtml(it.Category || "공략")}</span>
+              <span class="pill ${statusCls}">${escapeHtml(statusText)}</span>
+            </div>
+            <h2 class="guide-modal-title" id="guideModalTitle">${escapeHtml(it.Keyword)}</h2>
+            <div class="guide-modal-summary">${escapeHtml(it.Summary || "")}</div>
+          </div>
+          <button class="btn btn-sm" onclick="closeGuideModal()">닫기</button>
+        </div>
+        ${sectionsHtml}
+      `;
+      document.getElementById("guideModal").classList.add("open");
+    }
+
+    function closeGuideModal() {
+      document.getElementById("guideModal").classList.remove("open");
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeGuideModal();
+        document.getElementById("lightbox").classList.remove("open");
+      }
+    });
+
     function renderWikiDB() {
       const rows = DB.Game_Wiki_DB || [];
       const groups = {};
-      rows.forEach(r => { const sec = r.Category || "기타"; if (!groups[sec]) groups[sec] = []; groups[sec].push(r); });
+      rows.forEach((r, idx) => {
+        const sec = r.Category || "기타";
+        if (!groups[sec]) groups[sec] = [];
+        groups[sec].push({ ...r, __idx: idx });
+      });
       document.getElementById("wikiDbGrid").innerHTML = Object.entries(groups).map(([sec, items]) => `
         <div class="db-group">
           <div class="db-group-title"><span>${escapeHtml(sec)}</span><span class="pill pill-cat">${items.length}항목</span></div>
-          ${items.map(it => `<div class="db-row"><div class="db-val" style="color:var(--brand-blue-deep);">${escapeHtml(it.Keyword)}</div><div class="db-key" style="color:var(--ink-strong); margin-bottom:3px;">${escapeHtml(it.Summary)}</div><div class="db-note">${escapeHtml(it.Detail)}</div></div>`).join("")}
+          ${items.map(it => {
+            const detailed = hasDetailedGuide(it);
+            return `
+              <button class="wiki-row-btn" onclick="openGuideModal(${it.__idx})">
+                <div class="wiki-row-top">
+                  <div class="db-val" style="color:var(--brand-blue-deep); margin:0;">${escapeHtml(it.Keyword)}</div>
+                  <span class="pill ${detailed ? "pill-free" : "pill-cat"}">${detailed ? "상세 공략" : "상세 보기"}</span>
+                </div>
+                <div class="db-key" style="color:var(--ink-strong);">${escapeHtml(it.Summary)}</div>
+                <div class="db-note">${escapeHtml(it.Detail)}</div>
+              </button>
+            `;
+          }).join("")}
         </div>
       `).join("");
     }
