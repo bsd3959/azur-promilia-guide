@@ -1240,6 +1240,47 @@
       padding: 8px 11px;
       border-radius: 7px;
     }
+    .collapse-box {
+      background: var(--bg-surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .collapse-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--ink-strong);
+      font-size: 0.96rem;
+    }
+    .collapse-summary::-webkit-details-marker { display: none; }
+    .collapse-body { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle); }
+    .quick-import-box {
+      background: var(--brand-blue-soft);
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      margin-bottom: 18px;
+    }
+    .quick-import-box textarea {
+      width: 100%;
+      min-height: 78px;
+      margin: 10px 0;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface-solid);
+      color: var(--ink-strong);
+      font-family: inherit;
+      font-size: 0.82rem;
+    }
     @media (max-width: 960px) {
       .companion-grid { grid-template-columns: minmax(0, 1fr); }
     }
@@ -1738,23 +1779,28 @@
           </div>
         </div>
 
-        <div class="section-head">
-          <div>
-            <div class="section-title">초반 필수 정착 체크리스트</div>
-            <div class="section-sub">카드를 클릭하면 완료 표시가 브라우저에 자동 저장됩니다.</div>
-          </div>
-          <button class="btn btn-sm" onclick="resetChecklist()">체크 초기화</button>
-        </div>
-        <div class="progress-bar-card">
-          <div class="progress-wrap">
-            <div class="progress-label">
-              <span>오늘의 필수 루틴 진행도</span>
-              <span id="progressText" style="color: var(--brand-blue-deep);">0 / 0 완료 (0%)</span>
+        <details class="collapse-box" id="day1CollapseBox">
+          <summary class="collapse-summary">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span>초반 정착 가이드 (1회성 체크리스트)</span>
+              <span id="day1CollapseBadge" class="pill pill-cat">0 / 0 완료 (0%)</span>
             </div>
-            <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+            <span style="font-size:0.8rem; color:var(--brand-blue); font-weight:700;">클릭해서 펼치기 / 접기 ▾</span>
+          </summary>
+          <div class="collapse-body">
+            <div class="progress-bar-card">
+              <div class="progress-wrap">
+                <div class="progress-label">
+                  <span>초반 정착 진행도</span>
+                  <span id="progressText" style="color: var(--brand-blue-deep);">0 / 0 완료 (0%)</span>
+                </div>
+                <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+              </div>
+              <button class="btn btn-sm" onclick="resetChecklist()">체크 초기화</button>
+            </div>
+            <div class="checklist-grid" id="checklistGrid"></div>
           </div>
-        </div>
-        <div class="checklist-grid" id="checklistGrid"></div>
+        </details>
       </section>
 
       <!-- TAB 1.5: PERSONAL GROWTH & ZERO-COST AI CONSULTATION -->
@@ -1767,6 +1813,22 @@
           <div class="btn-row">
             <button class="btn btn-sm" onclick="exportCompanionBackup()">전체 개인 데이터 백업(JSON)</button>
             <label class="btn btn-sm" style="cursor:pointer;">백업 복원<input type="file" accept=".json" style="display:none" onchange="importCompanionBackup(event)" /></label>
+          </div>
+        </div>
+
+        <div class="quick-import-box">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;">
+            <div>
+              <div style="font-size:0.95rem; font-weight:800; color:var(--ink-strong);">스샷 1장으로 5초 자동 입력 (수동 입력 귀찮을 때)</div>
+              <div style="font-size:0.8rem; color:var(--ink-body);">① 인게임 재화·캐릭터 화면 캡처 → ② 아래 [스샷 추출 프롬프트 복사] 후 내 Gemini/ChatGPT에 스샷과 함께 전송 → ③ 받은 JSON을 아래에 붙여넣고 [1초 자동 반영]</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="copyScreenshotPrompt()">스샷 추출 프롬프트 복사</button>
+          </div>
+          <textarea id="quickJsonInput" placeholder='Gemini/ChatGPT가 스샷에서 뽑아준 JSON을 그대로 붙여넣으세요 (예: {"accountLevel":28,"lightMemory":45,"ownedCharacters":[{"name":"도산소옥","level":60,"breakthrough":1}]})'></textarea>
+          <div class="btn-row">
+            <button class="btn btn-primary btn-sm" onclick="applyQuickJsonImport()">1초 자동 반영</button>
+            <a class="btn btn-sm" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini 열기</a>
+            <a class="btn btn-sm" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT 열기</a>
           </div>
         </div>
 
@@ -2250,6 +2312,8 @@
       document.getElementById("badge-day1").textContent = `${doneCount}/${all.length}`;
       document.getElementById("statRoutine").textContent = `${doneCount}/${all.length}`;
       document.getElementById("progressText").textContent = `${doneCount} / ${all.length} 완료 (${pct}%)`;
+      const collapseBadge = document.getElementById("day1CollapseBadge");
+      if (collapseBadge) collapseBadge.textContent = `${doneCount} / ${all.length} 완료 (${pct}%)`;
       document.getElementById("progressFill").style.width = pct + "%";
 
       document.getElementById("checklistGrid").innerHTML = all.map((r, idx) => {
@@ -2833,6 +2897,68 @@
         window.APAIConsult.downloadFile(`azur_promilia_ai_consult_${stamp}.html`, doc, "text/html;charset=utf-8");
       }
       showToast(`AI 상담 자료를 ${fmt.toUpperCase()} 파일로 저장했습니다.`);
+    }
+
+    function copyScreenshotPrompt() {
+      const promptText = [
+        "첨부한 아주르 프로밀리아 인게임 스크린샷에서 확인되는 정보만 읽어서 아래 JSON 형식으로만 출력해 줘.",
+        "규칙: 화면에 안 보이는 숫자는 절대 0으로 적지 말고 반드시 null로 남겨 줘. 설명 없이 순수 JSON만 출력해 줘.",
+        "",
+        "{",
+        '  "accountLevel": null,',
+        '  "storyProgress": "",',
+        '  "lightMemory": null,',
+        '  "starMemory": null,',
+        '  "redstone": null,',
+        '  "ownedCharacters": [',
+        '    { "name": "캐릭터명", "level": null, "breakthrough": null, "note": "" }',
+        "  ]",
+        "}"
+      ].join("\n");
+      navigator.clipboard.writeText(promptText).then(() => showToast("스샷 추출용 프롬프트를 복사했습니다. Gemini/ChatGPT에 스샷과 함께 붙여넣으세요."));
+    }
+
+    function applyQuickJsonImport() {
+      const raw = (document.getElementById("quickJsonInput").value || "").trim();
+      if (!raw) { showToast("먼저 AI가 추출한 JSON을 붙여넣어 주세요."); return; }
+      try {
+        const fenced = raw.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+        const candidate = fenced ? fenced[1] : raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1);
+        const parsed = JSON.parse(candidate);
+        const store = window.APPersonalStore;
+
+        if (parsed.accountLevel !== undefined && parsed.accountLevel !== null) personalState.profile.accountLevel = store.normalizeNumberOrNull(parsed.accountLevel);
+        if (parsed.storyProgress) personalState.profile.storyProgress = String(parsed.storyProgress).trim();
+        if (parsed.lightMemory !== undefined && parsed.lightMemory !== null) personalState.profile.lightMemory = store.normalizeNumberOrNull(parsed.lightMemory);
+        if (parsed.starMemory !== undefined && parsed.starMemory !== null) personalState.profile.starMemory = store.normalizeNumberOrNull(parsed.starMemory);
+        if (parsed.redstone !== undefined && parsed.redstone !== null) personalState.profile.redstone = store.normalizeNumberOrNull(parsed.redstone);
+        personalState.profile.updatedAt = new Date().toISOString();
+
+        let charUpdated = 0;
+        if (Array.isArray(parsed.ownedCharacters)) {
+          parsed.ownedCharacters.forEach(c => {
+            if (!c || !c.name) return;
+            const cid = store.makeCharId(c.name);
+            const prev = personalState.ownedChars[cid] || { owned: true, name: String(c.name).trim(), level: null, breakthrough: null, note: "" };
+            prev.owned = true;
+            prev.name = String(c.name).trim();
+            if (c.level !== undefined && c.level !== null) prev.level = store.normalizeNumberOrNull(c.level);
+            if (c.breakthrough !== undefined && c.breakthrough !== null) prev.breakthrough = store.normalizeNumberOrNull(c.breakthrough);
+            if (c.note) prev.note = String(c.note).trim();
+            personalState.ownedChars[cid] = prev;
+            charUpdated++;
+          });
+        }
+
+        store.saveState(personalState);
+        document.getElementById("quickJsonInput").value = "";
+        renderProfileForm();
+        renderOwnedChars();
+        refreshAIPreview();
+        showToast(`자동 반영 완료! (캐릭터 ${charUpdated}명 업데이트됨)`);
+      } catch (err) {
+        showToast("JSON 형식을 인식하지 못했습니다. 중괄호 { ... } 전체를 붙여넣어 주세요.");
+      }
     }
 
     function exportCompanionBackup() {
