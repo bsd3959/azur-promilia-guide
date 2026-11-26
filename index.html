@@ -959,7 +959,25 @@
       font-size: 1rem;
       font-weight: 800;
       color: var(--ink-strong);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
     }
+    .party-char-btn {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      color: var(--ink-strong);
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: var(--border-strong);
+      text-underline-offset: 3px;
+    }
+    .party-char-btn:hover { color: var(--brand-blue); text-decoration-color: var(--brand-blue); }
     .party-node-alts {
       display: flex;
       flex-wrap: wrap;
@@ -968,12 +986,24 @@
     }
     .alt-chip {
       font-size: 0.74rem;
-      font-weight: 600;
-      padding: 2px 8px;
+      font-weight: 700;
+      font-family: inherit;
+      padding: 3px 9px;
       border-radius: var(--radius-pill);
       background: var(--brand-blue-soft);
       color: var(--brand-blue-deep);
       border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: border-color 140ms ease, background-color 140ms ease;
+    }
+    .alt-chip:hover { border-color: var(--brand-blue); background: var(--bg-surface-solid); }
+    .alt-chip.is-owned-alt {
+      background: var(--sev-ok-bg);
+      color: var(--sev-ok-ink);
+      border-color: var(--sev-ok-bd);
     }
     /* Skill Rotation Steps */
     .rotation-steps {
@@ -1027,7 +1057,7 @@
       overflow: hidden;
       border: 1.5px solid var(--border-strong);
       background: linear-gradient(135deg, var(--brand-blue-soft), var(--brand-sky-soft));
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 1 / 1;
       display: grid;
       place-items: center;
       position: relative;
@@ -1035,8 +1065,9 @@
     .char-portrait-box img {
       width: 100%;
       height: 100%;
+      aspect-ratio: 1 / 1;
       object-fit: cover;
-      object-position: center top;
+      object-position: 50% 15%;
     }
     .char-spec-table {
       width: 100%;
@@ -1214,8 +1245,9 @@
     .owned-avatar img {
       width: 100%;
       height: 100%;
+      aspect-ratio: 1 / 1;
       object-fit: cover;
-      object-position: center top;
+      object-position: 50% 15%;
     }
     .owned-char-name {
       font-size: 0.8rem;
@@ -1383,7 +1415,9 @@
     }
     .entity-media {
       position: relative;
-      height: 162px;
+      aspect-ratio: 1 / 1;
+      max-height: 240px;
+      width: 100%;
       background: linear-gradient(135deg, var(--brand-blue-soft), var(--brand-sky-soft));
       overflow: hidden;
       display: grid;
@@ -1392,8 +1426,28 @@
     .entity-media img {
       width: 100%;
       height: 100%;
+      aspect-ratio: 1 / 1;
       object-fit: cover;
-      object-position: center 20%;
+      object-position: 50% 15%;
+    }
+    .char-fallback-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--ink-inverse);
+      font-size: 1.55rem;
+      font-weight: 800;
+      box-shadow: var(--shadow-sm);
+      margin: 0 auto 6px;
+    }
+    .owned-avatar .char-fallback-circle {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      font-size: 1.15rem;
+      border-radius: 50%;
     }
     .entity-placeholder {
       text-align: center;
@@ -2414,6 +2468,52 @@
       );
     }
 
+    function getElementColor(element) {
+      const el = String(element || "");
+      if (el.includes("바람")) return "#10b981";
+      if (el.includes("번개")) return "#8b5cf6";
+      if (el.includes("불")) return "#ef4444";
+      if (el.includes("물")) return "#0ea5e9";
+      if (el.includes("땅")) return "#d97706";
+      if (el.includes("나무")) return "#16a34a";
+      if (el.includes("빛")) return "#eab308";
+      if (el.includes("어둠")) return "#6366f1";
+      return "#4b63f2";
+    }
+
+    function makeCharFallbackHtml(name, element, subText) {
+      const initial = escapeHtml(String(name || "?").trim().charAt(0) || "?");
+      const bg = getElementColor(element);
+      return `<div class="entity-placeholder"><div class="char-fallback-circle" style="background:${bg};">${initial}</div>${subText ? `<span class="sub-name">${escapeHtml(subText)}</span>` : ""}</div>`;
+    }
+
+    function isCharOwnedByName(charName) {
+      const clean = String(charName || "").trim();
+      if (!clean || !personalState || !personalState.ownedChars) return false;
+      const store = window.APPersonalStore;
+      const direct = personalState.ownedChars[store.makeCharId(clean)];
+      if (direct && direct.owned) return true;
+      return Object.values(personalState.ownedChars).some(v => v && v.owned && v.name && (v.name === clean || v.name.includes(clean) || clean.includes(v.name)));
+    }
+
+    function findCharIndexByName(charName) {
+      const clean = String(charName || "").trim();
+      if (!clean) return -1;
+      const rows = DB.Tier_Characters || [];
+      let idx = rows.findIndex(r => String(r.Name || "").trim() === clean);
+      if (idx !== -1) return idx;
+      return rows.findIndex(r => String(r.Name || "").includes(clean) || clean.includes(String(r.Name || "").split(/[·/(]/)[0].trim()));
+    }
+
+    function openCharModalByName(charName) {
+      const idx = findCharIndexByName(charName);
+      if (idx !== -1) {
+        openCharModal(idx);
+      } else {
+        showToast(`"${charName}" 캐릭터의 상세 도감이 아직 등록되지 않았습니다.`);
+      }
+    }
+
     function parsePartyNodesHtml(raw) {
       const slots = String(raw || "").split("|").map(s => s.trim()).filter(Boolean);
       if (!slots.length) return "";
@@ -2433,14 +2533,25 @@
           charName = mainPart.slice(colonIdx + 1).trim();
         }
         const alts = altText ? altText.split(/[,/]/).map(a => a.trim()).filter(Boolean) : [];
+        const mainOwned = isCharOwnedByName(charName);
+        const safeMain = escapeHtml(charName);
+        const jsMain = safeMain.replace(/'/g, "\\'");
         return `
           <div class="party-node">
             <div class="party-node-num">
               <span class="party-node-dot">${idx + 1}</span>
               <span>${escapeHtml(roleLabel)}</span>
             </div>
-            <div class="party-node-main">${escapeHtml(charName)}</div>
-            ${alts.length ? `<div class="party-node-alts">${alts.map(a => `<span class="alt-chip">대체: ${escapeHtml(a)}</span>`).join("")}</div>` : ""}
+            <div class="party-node-main">
+              <button type="button" class="party-char-btn" onclick="openCharModalByName('${jsMain}')">${safeMain}</button>
+              ${mainOwned ? `<span class="pill pill-free">보유 ✓</span>` : ""}
+            </div>
+            ${alts.length ? `<div class="party-node-alts">${alts.map(a => {
+              const altOwned = isCharOwnedByName(a);
+              const safeAlt = escapeHtml(a);
+              const jsAlt = safeAlt.replace(/'/g, "\\'");
+              return `<button type="button" class="alt-chip ${altOwned ? "is-owned-alt" : ""}" onclick="openCharModalByName('${jsAlt}')">대체: ${safeAlt}${altOwned ? " · 대체 보유" : ""}</button>`;
+            }).join("")}</div>` : ""}
           </div>
         `;
       }).join("") + `</div>`;
@@ -2584,10 +2695,10 @@
       if (!c) return;
       const t = c.Tier || "";
       const pillCls = t.includes("T0") ? "pill-t0" : (t.includes("T1") ? "pill-t1" : (t.includes("무료") ? "pill-free" : "pill-4s"));
-      const starSvg = `<svg width="42" height="42" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
+      const fallbackHtml = makeCharFallbackHtml(c.Name, c.Element, `${c.Element || ""} / ${c.Role || ""}`);
       const portraitHtml = c.ImageURL
-        ? `<img src="${escapeHtml(c.ImageURL)}" alt="${escapeHtml(c.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="entity-placeholder" style="display:none;">${starSvg}<span class="sub-name">${escapeHtml(c.Name)}</span></div>`
-        : `<div class="entity-placeholder">${starSvg}<span class="sub-name">${escapeHtml(c.Name)}</span></div>`;
+        ? `<img src="${escapeHtml(c.ImageURL)}" alt="${escapeHtml(c.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div style="display:none; width:100%;">${fallbackHtml}</div>`
+        : fallbackHtml;
 
       const specRows = [
         ["등급 / 티어", `${c.Rarity || (t.includes("4성") ? "4성" : "5성")} (${t || "-"})`],
@@ -2653,10 +2764,10 @@
         const pillCls = t.includes("T0") ? "pill-t0" : (t.includes("T1") ? "pill-t1" : (t.includes("무료") ? "pill-free" : "pill-4s"));
         const isT0 = t.includes("T0");
         const hasProfile = Boolean(r.Story || r.Weapon || r.CombatTips);
-        const starSvg = `<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
+        const fallbackHtml = makeCharFallbackHtml(r.Name, r.Element, `${r.Element} / ${r.Role}`);
         const mediaHtml = r.ImageURL
-          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="entity-placeholder" style="display:none;">${starSvg}<span class="sub-name">${escapeHtml(r.Name)}</span></div>`
-          : `<div class="entity-placeholder">${starSvg}<span class="sub-name">${escapeHtml(r.Element)} / ${escapeHtml(r.Role)}</span></div>`;
+          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div style="display:none; width:100%;">${fallbackHtml}</div>`
+          : fallbackHtml;
         return `
           <article class="entity-card clickable ${isT0 ? "tier-t0" : ""}" onclick="openCharModal(${r.__idx})" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCharModal(${r.__idx});}">
             <div class="entity-media">
@@ -2682,11 +2793,11 @@
 
     function renderKibo() {
       const rows = DB.Kibo_Guide || [];
-      const starSvg = `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
       document.getElementById("kiboGrid").innerHTML = rows.map(r => {
+        const fallbackHtml = makeCharFallbackHtml(r.Name, r.Element, `${r.Category} / ${r.Role}`);
         const mediaHtml = r.ImageURL
-          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="entity-placeholder" style="display:none;">${starSvg}<span class="sub-name">${escapeHtml(r.Name)}</span></div>`
-          : `<div class="entity-placeholder">${starSvg}<span class="sub-name">${escapeHtml(r.Category)} / ${escapeHtml(r.Role)}</span></div>`;
+          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div style="display:none; width:100%;">${fallbackHtml}</div>`
+          : fallbackHtml;
         return `
           <article class="entity-card">
             <div class="entity-media">
@@ -2895,10 +3006,12 @@
         const rec = personalState.ownedChars[cid] || { owned: false, level: null, breakthrough: null, note: "" };
         const safeId = escapeHtml(cid);
         const safeName = escapeHtml(c.Name);
-        const shortInitial = escapeHtml(String(c.Name || "?").slice(0, 2));
+        const initial = escapeHtml(String(c.Name || "?").trim().charAt(0) || "?");
+        const elColor = getElementColor(c.Element);
+        const fallbackCircle = `<div class="char-fallback-circle" style="background:${elColor};">${initial}</div>`;
         const avatarHtml = c.ImageURL
-          ? `<img src="${escapeHtml(c.ImageURL)}" alt="${safeName}" onerror="this.style.display='none'; this.parentElement.textContent='${shortInitial}';" />`
-          : shortInitial;
+          ? `<img src="${escapeHtml(c.ImageURL)}" alt="${safeName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" /><div class="char-fallback-circle" style="display:none; background:${elColor};">${initial}</div>`
+          : fallbackCircle;
         const metaParts = [];
         if (rec.level !== null && rec.level !== undefined) metaParts.push(`Lv.${rec.level}`);
         if (rec.breakthrough !== null && rec.breakthrough !== undefined) metaParts.push(`${rec.breakthrough}돌`);

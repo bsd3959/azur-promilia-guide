@@ -1,0 +1,44 @@
+name: Sync Google Drive Character Images
+
+on:
+  schedule:
+    - cron: '5 1 * * *' # 매일 한국시간(KST) 오전 10:05 (UTC 01:05)
+  workflow_dispatch:
+
+concurrency:
+  group: sync-drive-images
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install gdown pillow
+
+      - name: Download & convert Drive images to 512x512 WebP
+        run: python scripts/sync_drive_images.py
+
+      - name: Commit & push updated character portraits
+        run: |
+          if [ -n "$(git status --porcelain assets/characters/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add assets/characters/
+            git commit -m "chore: sync character portraits from Google Drive"
+            git push
+          else
+            echo "변경된 캐릭터 이미지가 없어 커밋을 건너뜁니다."
+          fi
