@@ -1493,6 +1493,122 @@
     }
     .loadout-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
+    /* Multi-Filter & Sort Toolbar (Tier Tab) */
+    .tier-toolbar {
+      background: var(--bg-surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 13px 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tier-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 14px;
+    }
+    .tier-filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+    }
+    .tier-filter-label {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--ink-muted);
+      margin-right: 3px;
+    }
+    .tier-toolbar-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+    .tier-sort-select {
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface-solid);
+      color: var(--ink-strong);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Kibo & Housing 2-Section Layout */
+    .kibo-subhead {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+      margin: 4px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .kibo-guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .kibo-guide-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+    }
+    .kibo-guide-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue-deep);
+      border: 1px solid var(--border-subtle);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .kibo-thumb-box {
+      width: 88px;
+      height: 88px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-surface-solid);
+      border: 1.5px solid var(--border-strong);
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .kibo-thumb-box img {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+    }
+    .kibo-svg-fallback {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--ink-inverse);
+    }
+
     /* Companion Scrapbook & Daily Diff Timeline */
     .comp-scrap-drop {
       border: 1.5px dashed var(--border-strong);
@@ -2304,10 +2420,10 @@
         <div class="section-head">
           <div>
             <div class="section-title">캐릭터 티어표 &amp; 상세 도감 DB</div>
-            <div class="section-sub">캐릭터 카드를 클릭하면 나무위키 스타일 프로필(종족·무기·배경 스토리·스펙·스킬·실전 팁·세팅)을 볼 수 있습니다.</div>
+            <div class="section-sub">캐릭터 카드를 클릭하면 나무위키 스타일 프로필(종족·무기·배경 스토리·스펙·스킬·돌파·추천 세팅)을 볼 수 있습니다.</div>
           </div>
         </div>
-        <div class="filter-row" id="tierFilters"></div>
+        <div class="tier-toolbar" id="tierFilters"></div>
         <div class="card-grid" id="tierGrid"></div>
       </section>
 
@@ -2316,10 +2432,13 @@
         <div class="section-head">
           <div>
             <div class="section-title">키보 도감 &amp; 포획·돌연변이·하우징 가이드</div>
-            <div class="section-sub">스타팅 3종 비교와 핵심 포획·육성·거점 배치 메커니즘</div>
+            <div class="section-sub">추천 키보 도감과 핵심 포획·육성·거점 배치 가이드를 한눈에 확인하세요.</div>
           </div>
         </div>
-        <div class="card-grid" id="kiboGrid"></div>
+        <div class="kibo-subhead">추천 키보 도감 <span id="kiboDexCount" class="pill pill-rec">0종</span></div>
+        <div class="card-grid" id="kiboGrid" style="margin-bottom: 26px;"></div>
+        <div class="kibo-subhead">포획 · 육성 · 하우징 핵심 가이드 <span id="kiboGuideCount" class="pill pill-free">0건</span></div>
+        <div class="kibo-guide-grid" id="kiboGuideGrid"></div>
       </section>
 
       <!-- TAB 5: COUPONS & EVENTS -->
@@ -2398,6 +2517,9 @@
 
     let DB = JSON.parse(JSON.stringify(FALLBACK_DATA));
     let activeTierFilter = "전체";
+    let activeRoleFilter = "전체";
+    let activeSourceFilter = "전체";
+    let activeSortOrder = "tier";
     let personalState = window.APPersonalStore.loadState();
     let checkedMap = personalState.day1Checked || {};
     let usedCouponMap = personalState.usedCoupons || {};
@@ -2947,7 +3069,9 @@
 
     const CHAR_SLUG_MAP = {
       "도산소옥": "tushan", "모르윈": "morwyn", "루비": "ruby", "샬레": "shalle",
-      "페페": "pepe", "루루카": "luluka", "멧사": "metsa", "애니스": "anais"
+      "페페": "pepe", "루루카": "luluka", "멧사": "metsa", "애니스": "anais",
+      "아비": "abbye", "성림자": "starborn", "한요요": "hanyoyo", "메이플": "maple",
+      "미티": "miti", "카타루": "kataru", "심포리아": "symphoria", "테라라": "terara"
     };
 
     function getCharSlug(name) {
@@ -3229,13 +3353,114 @@
       return true;
     }
 
+    function matchesRoleFilter(row, filterVal) {
+      if (filterVal === "전체") return true;
+      const role = String(row.Role || "");
+      if (filterVal === "메인 딜러") return /딜러|맹공|폭발/.test(role);
+      if (filterVal === "파괴/서브") return /파괴|서브|브레이크/.test(role);
+      if (filterVal === "서포터/범용") return /서포터|증폭|회복|힐|범용|파츠|미래시|부여|지원/.test(role);
+      return true;
+    }
+
+    function matchesSourceFilter(row, filterVal) {
+      if (filterVal === "전체") return true;
+      const src = String(row.Source || "");
+      if (filterVal === "한정 픽업") return /한정|픽업/.test(src);
+      if (filterVal === "상시/선택권") return /상시|선택권/.test(src);
+      if (filterVal === "무료/배포") return /무료|배포|기본|이벤트|임무|합류|사전등록/.test(src);
+      return true;
+    }
+
+    function getTierRank(row) {
+      const t = String(row.Tier || "");
+      if (t.includes("T0")) return 0;
+      if (t.includes("T1")) return 1;
+      if (t.includes("T2")) return 2;
+      if (t.includes("무료")) return 3;
+      if (t.includes("미래시") || t.includes("특화")) return 4;
+      if (t.includes("4성")) return 5;
+      return 6;
+    }
+
+    function getRarityRank(row) {
+      const r = String(row.Rarity || "");
+      const t = String(row.Tier || "");
+      if (r.includes("5성") || (!r && !t.includes("4성"))) return 0;
+      return 1;
+    }
+
+    function resetTierFilters() {
+      activeTierFilter = "전체";
+      activeRoleFilter = "전체";
+      activeSourceFilter = "전체";
+      activeSortOrder = "tier";
+      renderTier();
+    }
+
     function renderTier() {
       const all = DB.Tier_Characters || [];
-      const rarityFilters = ["전체", "5성", "4성"];
-      if (!rarityFilters.includes(activeTierFilter)) activeTierFilter = "전체";
-      document.getElementById("tierFilters").innerHTML = rarityFilters.map(t => `<button class="chip ${activeTierFilter === t ? "active" : ""}" onclick="activeTierFilter='${t}'; renderTier();">${t}</button>`).join("");
+      const rarityOpts = ["전체", "5성", "4성"];
+      const roleOpts = ["전체", "메인 딜러", "파괴/서브", "서포터/범용"];
+      const sourceOpts = ["전체", "한정 픽업", "상시/선택권", "무료/배포"];
+
+      if (!rarityOpts.includes(activeTierFilter)) activeTierFilter = "전체";
+      if (!roleOpts.includes(activeRoleFilter)) activeRoleFilter = "전체";
+      if (!sourceOpts.includes(activeSourceFilter)) activeSourceFilter = "전체";
+
       const indexed = all.map((r, idx) => ({ ...r, __idx: idx }));
-      const rows = indexed.filter(r => matchesRarityFilter(r, activeTierFilter));
+      const rows = indexed.filter(r =>
+        matchesRarityFilter(r, activeTierFilter) &&
+        matchesRoleFilter(r, activeRoleFilter) &&
+        matchesSourceFilter(r, activeSourceFilter)
+      );
+
+      rows.sort((a, b) => {
+        if (activeSortOrder === "rarity") {
+          const d = getRarityRank(a) - getRarityRank(b);
+          if (d !== 0) return d;
+          return getTierRank(a) - getTierRank(b);
+        }
+        if (activeSortOrder === "name") {
+          return String(a.Name || "").localeCompare(String(b.Name || ""), "ko");
+        }
+        const td = getTierRank(a) - getTierRank(b);
+        if (td !== 0) return td;
+        return a.__idx - b.__idx;
+      });
+
+      const hasFilter = activeTierFilter !== "전체" || activeRoleFilter !== "전체" || activeSourceFilter !== "전체" || activeSortOrder !== "tier";
+
+      document.getElementById("tierFilters").innerHTML = `
+        <div class="tier-filter-row">
+          <div class="tier-filter-group">
+            <span class="tier-filter-label">성급</span>
+            ${rarityOpts.map(t => `<button class="chip ${activeTierFilter === t ? "active" : ""}" onclick="activeTierFilter='${t}'; renderTier();">${t}</button>`).join("")}
+          </div>
+          <div class="tier-filter-group">
+            <span class="tier-filter-label">역할</span>
+            ${roleOpts.map(t => `<button class="chip ${activeRoleFilter === t ? "active" : ""}" onclick="activeRoleFilter='${t}'; renderTier();">${t}</button>`).join("")}
+          </div>
+          <div class="tier-filter-group">
+            <span class="tier-filter-label">획득처</span>
+            ${sourceOpts.map(t => `<button class="chip ${activeSourceFilter === t ? "active" : ""}" onclick="activeSourceFilter='${t}'; renderTier();">${t}</button>`).join("")}
+          </div>
+        </div>
+        <div class="tier-toolbar-meta">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.82rem; font-weight:700; color:var(--ink-body);">표시 중 <strong style="color:var(--brand-blue-deep);">${rows.length}명</strong> / 전체 ${all.length}명</span>
+            ${hasFilter ? `<button class="btn btn-sm" onclick="resetTierFilters()">필터 초기화</button>` : ""}
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <label for="tierSortSelect" style="font-size:0.78rem; font-weight:700; color:var(--ink-muted);">정렬</label>
+            <select id="tierSortSelect" class="tier-sort-select" onchange="activeSortOrder=this.value; renderTier();">
+              <option value="tier" ${activeSortOrder === "tier" ? "selected" : ""}>티어순 (기본)</option>
+              <option value="rarity" ${activeSortOrder === "rarity" ? "selected" : ""}>성급순 (5성→4성)</option>
+              <option value="name" ${activeSortOrder === "name" ? "selected" : ""}>이름순 (가나다)</option>
+            </select>
+          </div>
+        </div>
+      `;
+
       document.getElementById("tierGrid").innerHTML = rows.map(r => {
         const t = r.Tier || "";
         const rarityLabel = String(r.Rarity || (t.includes("4성") ? "4성" : "5성")).includes("4성") ? "4성" : "5성";
@@ -3272,33 +3497,92 @@
               </div>
             </div>
           </article>`;
-      }).join("");
+      }).join("") || `<p style="color:var(--ink-muted); grid-column:1/-1; padding:18px 4px;">선택한 조건에 맞는 캐릭터가 없습니다. [필터 초기화]를 눌러보세요.</p>`;
+    }
+
+    function getKiboGuideSvg(category) {
+      const cat = String(category || "");
+      if (cat.includes("포획")) {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/></svg>`;
+      }
+      if (cat.includes("육성") || cat.includes("돌연변이")) {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/><path d="M2 9c6.667 6 13.333 0 20 6"/></svg>`;
+      }
+      if (cat.includes("하우징") || cat.includes("거점")) {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9 20v-6h6v6"/></svg>`;
+      }
+      return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
     }
 
     function renderKibo() {
       const rows = DB.Kibo_Guide || [];
-      document.getElementById("kiboGrid").innerHTML = rows.map(r => {
-        const fallbackHtml = makeCharFallbackHtml(r.Name, r.Element, `${r.Category} / ${r.Role}`);
-        const mediaHtml = r.ImageURL
-          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div style="display:none; width:100%;">${fallbackHtml}</div>`
-          : fallbackHtml;
+      const guideCats = ["포획 팁", "육성 팁", "하우징"];
+      const dexRows = [];
+      const guideRows = [];
+      rows.forEach(r => {
+        const cat = String(r.Category || "").trim();
+        if (guideCats.some(g => cat.includes(g) || cat.includes("팁") || cat.includes("하우징"))) {
+          guideRows.push(r);
+        } else {
+          dexRows.push(r);
+        }
+      });
+
+      const dexCountEl = document.getElementById("kiboDexCount");
+      if (dexCountEl) dexCountEl.textContent = dexRows.length + "종";
+      const guideCountEl = document.getElementById("kiboGuideCount");
+      if (guideCountEl) guideCountEl.textContent = guideRows.length + "건";
+
+      const kiboSlugMap = {
+        "새싹 여우": "sproutfox", "불꽃 음메": "flamemoo", "꼬마 비버": "littlebeaver",
+        "팬텀플라이": "phantomfly", "해피개굴": "happyfrog", "보송 브리니": "fluffybriny"
+      };
+
+      document.getElementById("kiboGrid").innerHTML = dexRows.map(r => {
+        const elColor = getElementColor(r.Element);
+        const svgFallback = `<div class="kibo-svg-fallback" style="background:${elColor};"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg></div>`;
+        const localSlug = kiboSlugMap[String(r.Name || "").trim()];
+        const imgUrl = (r.ImageURL && r.ImageURL.trim()) || (localSlug ? `./assets/kibo/${localSlug}.webp` : "");
+        const thumbHtml = imgUrl
+          ? `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" /><div class="kibo-svg-fallback" style="display:none; background:${elColor};"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg></div>`
+          : svgFallback;
         return `
           <article class="entity-card">
-            <div class="entity-media">
-              ${mediaHtml}
-              <div class="media-badges">
-                <span class="pill pill-rec">${escapeHtml(r.Category)}</span>
-                <span class="pill media-badge-dark">${escapeHtml(r.Element)}</span>
+            <div class="char-card-head">
+              <div class="kibo-thumb-box">${thumbHtml}</div>
+              <div class="char-card-head-info">
+                <div class="char-card-badges">
+                  <span class="pill pill-rec">${escapeHtml(r.Category)}</span>
+                  <span class="pill pill-cat">${escapeHtml(r.Element)}</span>
+                </div>
+                <div class="entity-name">${escapeHtml(r.Name)}</div>
+                <div style="font-size:0.79rem; color:var(--brand-gold); font-weight:700;">역할: ${escapeHtml(r.Role)}</div>
               </div>
             </div>
             <div class="entity-body">
-              <div class="entity-name">${escapeHtml(r.Name)}</div>
-              <div class="entity-source">역할: ${escapeHtml(r.Role)}</div>
-              <div class="entity-desc">${escapeHtml(r.Effect)}</div>
-              ${r.Note ? `<div class="entity-synergy">참고: ${escapeHtml(r.Note)}</div>` : ""}
+              <div class="entity-desc">${highlightGameText(r.Effect)}</div>
+              ${r.Note ? `<div class="entity-synergy">참고: ${highlightGameText(r.Note)}</div>` : ""}
             </div>
           </article>`;
-      }).join("");
+      }).join("") || `<p style="color:var(--ink-muted);">등록된 추천 키보가 없습니다.</p>`;
+
+      const guideGrid = document.getElementById("kiboGuideGrid");
+      if (guideGrid) {
+        guideGrid.innerHTML = guideRows.map(r => `
+          <article class="kibo-guide-card">
+            <div class="kibo-guide-icon" aria-hidden="true">${getKiboGuideSvg(r.Category)}</div>
+            <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                <span class="pill pill-free">${escapeHtml(r.Category)}</span>
+                ${r.Role ? `<span class="pill pill-cat">${escapeHtml(r.Role)}</span>` : ""}
+              </div>
+              <div style="font-size:0.96rem; font-weight:800; color:var(--ink-strong);">${escapeHtml(r.Name)}</div>
+              <div style="font-size:0.85rem; color:var(--ink-body); line-height:1.58;">${highlightGameText(r.Effect)}</div>
+              ${r.Note ? `<div class="check-tip" style="margin-top:4px;">팁: ${highlightGameText(r.Note)}</div>` : ""}
+            </div>
+          </article>
+        `).join("") || `<p style="color:var(--ink-muted);">등록된 가이드 항목이 없습니다.</p>`;
+      }
     }
 
     function copyText(text) {
