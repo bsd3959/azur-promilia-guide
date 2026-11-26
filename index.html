@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>아주르 프로밀리아 — 한국 실시간 공략 대시보드</title>
+  <meta name="description" content="한국(넥슨) 아주르 프로밀리아 실시간 이슈, 필수 루틴, 캐릭터 티어, 키보 가이드, 한국 전용 쿠폰 통합 대시보드" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    /* Hallmark · v2.0.0 · custom · genre: playful-utility · theme: azure-light-clarity · job: lookup & daily routine */
+    /* critique: light-first readability inspired by user reference + Azur Promilia sky/starlight filigree without visual clutter */
+    :root {
+      --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+
+      /* Base Surfaces (Reference Light Clarity) */
+      --bg-canvas: #f3f6fd;
+      --bg-surface: #ffffff;
+      --bg-surface-soft: #eef3fc;
+      --bg-surface-hover: #f8faff;
+      --bg-hero-veil-top: rgba(243, 246, 253, 0.72);
+      --bg-hero-veil-mid: rgba(243, 246, 253, 0.88);
+      --bg-hero-veil-bot: #f3f6fd;
+      --bg-nav: rgba(255, 255, 255, 0.9);
+      --bg-modal: rgba(15, 23, 42, 0.76);
+      --bg-toast: #172554;
+
+      /* Borders & Filigree */
+      --border-subtle: #dde5f5;
+      --border-strong: #b9c9f0;
+      --border-brand: #4b63f2;
+      --border-gold: #e5c372;
+      --dot-pattern: rgba(75, 99, 242, 0.14);
+
+      /* Ink Hierarchy */
+      --ink-strong: #0f172a;
+      --ink-body: #334155;
+      --ink-muted: #64748b;
+      --ink-inverse: #ffffff;
+
+      /* Brand & Azur Promilia Accents */
+      --brand-blue: #4b63f2;
+      --brand-blue-deep: #354ad1;
+      --brand-blue-soft: #ebefff;
+      --brand-sky: #0ea5e9;
+      --brand-sky-soft: #e6f5fe;
+      --brand-gold: #b47b11;
+      --brand-gold-bright: #d99b26;
+      --brand-gold-soft: #fef7e2;
+
+      /* Semantic Badges (Dashboard v3 Compatible) */
+      --sev-high-bg: #fff0f3;
+      --sev-high-ink: #be123c;
+      --sev-high-bd: #fecdd3;
+
+      --sev-mid-bg: #fff8e6;
+      --sev-mid-ink: #b45309;
+      --sev-mid-bd: #fde68a;
+
+      --sev-info-bg: #ebf3ff;
+      --sev-info-ink: #1d4ed8;
+      --sev-info-bd: #bfdbfe;
+
+      --sev-ok-bg: #ecfdf5;
+      --sev-ok-ink: #047857;
+      --sev-ok-bd: #a7f3d0;
+
+      --sev-4s-bg: #f3efff;
+      --sev-4s-ink: #6d28d9;
+      --sev-4s-bd: #ddd6fe;
+
+      --sev-neutral-bg: #f1f5f9;
+      --sev-neutral-ink: #475569;
+      --sev-neutral-bd: #e2e8f0;
+
+      /* Elevation & Geometry */
+      --shadow-sm: 0 2px 10px rgba(30, 58, 138, 0.05);
+      --shadow-md: 0 10px 30px rgba(37, 65, 165, 0.08);
+      --shadow-lg: 0 18px 44px rgba(37, 65, 165, 0.13);
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 9px;
+      --radius-pill: 999px;
+      --container-max: 1260px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      overflow-x: clip;
+      font-family: var(--font-sans);
+      background-color: var(--bg-canvas);
+      color: var(--ink-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 64px;
+    }
+
+    /* Subtle Azur Promilia Sky & Constellation Backdrop (Readability-First) */
+    .world-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .world-backdrop-art {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://azurpromilia-web.dn.nexoncdn.co.kr/events/2025/1215_preregistration_A23C27F10386720E/meta.jpg');
+      background-size: cover;
+      background-position: center 14%;
+      opacity: 0.14;
+      filter: saturate(1.1) contrast(0.95);
+    }
+    .world-backdrop-veil {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 14% 12%, rgba(75, 99, 242, 0.09), transparent 38%),
+        radial-gradient(circle at 86% 10%, rgba(14, 165, 233, 0.09), transparent 36%),
+        linear-gradient(180deg, var(--bg-hero-veil-top) 0%, var(--bg-hero-veil-mid) 34%, var(--bg-hero-veil-bot) 68%);
+    }
+    .world-dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(var(--dot-pattern) 1.35px, transparent 1.35px);
+      background-size: 26px 26px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, transparent 55%);
+      -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, transparent 55%);
+    }
+    .world-ring {
+      position: absolute;
+      top: -120px;
+      right: -110px;
+      width: 460px;
+      height: 460px;
+      color: var(--brand-blue);
+      opacity: 0.09;
+    }
+
+    :focus-visible {
+      outline: 2.5px solid var(--brand-blue);
+      outline-offset: 2px;
+    }
+
+    .wrap {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Top Utility Bar */
+    .topbar {
+      padding: 16px 0 8px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--ink-strong);
+    }
+    .brand-crest {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-strong);
+      display: grid;
+      place-items: center;
+      color: var(--brand-blue);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .brand-crest::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border-gold);
+      opacity: 0.65;
+      pointer-events: none;
+    }
+    .brand-title-wrap {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .brand-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+      letter-spacing: -0.02em;
+    }
+    .brand-sub {
+      font-size: 0.76rem;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--ink-muted);
+      box-shadow: var(--shadow-sm);
+    }
+    .sync-pill.live {
+      border-color: var(--sev-ok-bd);
+      background: var(--sev-ok-bg);
+      color: var(--sev-ok-ink);
+    }
+    .sync-pill.fallback {
+      border-color: var(--sev-mid-bd);
+      background: var(--sev-mid-bg);
+      color: var(--sev-mid-ink);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      color: var(--ink-strong);
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+    }
+    .btn:hover {
+      border-color: var(--border-brand);
+      background: var(--bg-surface-hover);
+      transform: translateY(-1px);
+    }
+    .btn-primary {
+      background: var(--brand-blue);
+      border-color: var(--brand-blue);
+      color: var(--ink-inverse);
+    }
+    .btn-primary:hover {
+      background: var(--brand-blue-deep);
+      border-color: var(--brand-blue-deep);
+      color: var(--ink-inverse);
+    }
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+    }
+
+    /* Hero Section (Reference Clarity + In-game Filigree Frame) */
+    .hero-card {
+      position: relative;
+      margin: 10px 0 18px;
+      padding: 28px 30px 24px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    /* In-game Azur Promilia Gold/Sky Corner Filigree */
+    .hero-card::before,
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+    }
+    .hero-card::before {
+      top: 10px;
+      left: 10px;
+      border-top: 2px solid var(--border-gold);
+      border-left: 2px solid var(--border-gold);
+      border-top-left-radius: 6px;
+    }
+    .hero-card::after {
+      bottom: 10px;
+      right: 10px;
+      border-bottom: 2px solid var(--border-gold);
+      border-right: 2px solid var(--border-gold);
+      border-bottom-right-radius: 6px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      border-radius: var(--radius-pill);
+      background: var(--brand-blue);
+      color: var(--ink-inverse);
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: clamp(1.45rem, 2.5vw, 2.05rem);
+      font-weight: 800;
+      color: var(--ink-strong);
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      overflow-wrap: break-word;
+      min-width: 0;
+      margin-bottom: 8px;
+    }
+    .hero-desc {
+      font-size: 0.94rem;
+      color: var(--ink-body);
+      max-width: 56ch;
+      margin-bottom: 16px;
+    }
+
+    /* Prominent Global Search Bar */
+    .hero-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .hero-search input {
+      width: 100%;
+      padding: 13px 44px 13px 44px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--ink-strong);
+      font-family: inherit;
+      font-size: 0.93rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .hero-search input::placeholder { color: var(--ink-muted); }
+    .hero-search input:focus {
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 4px rgba(75, 99, 242, 0.14);
+      outline: none;
+    }
+    .hero-search-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--brand-blue);
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+    .search-clear {
+      position: absolute;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: var(--bg-surface-soft);
+      color: var(--ink-muted);
+      cursor: pointer;
+      display: none;
+      place-items: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .search-clear.show { display: grid; }
+    .search-clear:hover { background: var(--border-subtle); color: var(--ink-strong); }
+
+    .quick-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .quick-tags-label {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      font-weight: 600;
+      margin-right: 2px;
+    }
+    .quick-tag {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-soft);
+      color: var(--ink-body);
+      font-size: 0.77rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease;
+    }
+    .quick-tag:hover {
+      border-color: var(--brand-blue);
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue-deep);
+    }
+
+    /* Live Summary Stat Strip (Real Sheet Counts Only) */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .stat-tile {
+      background: var(--bg-surface-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
+    }
+    .stat-tile:hover {
+      border-color: var(--border-brand);
+      background: var(--bg-surface);
+      transform: translateY(-2px);
+    }
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-pill);
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue);
+      display: grid;
+      place-items: center;
+      margin-bottom: 4px;
+    }
+    .stat-num {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+    }
+
+    /* Sticky Tab Navigation */
+    .nav-bar {
+      position: sticky;
+      top: 10px;
+      z-index: 40;
+      background: var(--bg-nav);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 7px 9px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-bar::-webkit-scrollbar { display: none; }
+    .tabs {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: nowrap;
+    }
+    .tab-btn {
+      white-space: nowrap;
+      padding: 9px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink-body);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+    }
+    .tab-btn:hover {
+      background: var(--bg-surface-soft);
+      color: var(--ink-strong);
+    }
+    .tab-btn.active {
+      background: var(--brand-blue);
+      color: var(--ink-inverse);
+      box-shadow: 0 6px 16px rgba(75, 99, 242, 0.25);
+    }
+    .tab-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface-soft);
+      color: var(--brand-blue-deep);
+    }
+    .tab-btn.active .tab-badge {
+      background: rgba(255, 255, 255, 0.22);
+      color: var(--ink-inverse);
+    }
+
+    /* Section Header with Azur Promilia Hairline Divider */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+    }
+    .section-head::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 72px;
+      height: 2px;
+      background: var(--brand-blue);
+      border-radius: 2px;
+    }
+    .section-title {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-wrap: break-word;
+      min-width: 0;
+    }
+    .section-sub {
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    /* Semantic Pills */
+    .pill {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid transparent;
+      line-height: 1.3;
+    }
+    .pill-must { background: var(--sev-high-bg); color: var(--sev-high-ink); border-color: var(--sev-high-bd); }
+    .pill-warn { background: var(--sev-mid-bg); color: var(--sev-mid-ink); border-color: var(--sev-mid-bd); }
+    .pill-rec  { background: var(--sev-info-bg); color: var(--sev-info-ink); border-color: var(--sev-info-bd); }
+    .pill-cat  { background: var(--sev-neutral-bg); color: var(--sev-neutral-ink); border-color: var(--sev-neutral-bd); }
+    .pill-t0   { background: var(--brand-gold-soft); color: var(--brand-gold); border-color: var(--border-gold); }
+    .pill-t1   { background: var(--sev-info-bg); color: var(--sev-info-ink); border-color: var(--sev-info-bd); }
+    .pill-free { background: var(--sev-ok-bg); color: var(--sev-ok-ink); border-color: var(--sev-ok-bd); }
+    .pill-4s   { background: var(--sev-4s-bg); color: var(--sev-4s-ink); border-color: var(--sev-4s-bd); }
+
+    /* Global Search Overlay */
+    .global-search-panel {
+      display: none;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-brand);
+      border-radius: var(--radius-xl);
+      padding: 20px 22px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+    }
+    .global-search-panel.active { display: block; }
+    .search-result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .search-item {
+      background: var(--bg-surface-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .search-item-title { font-size: 0.96rem; font-weight: 800; color: var(--ink-strong); }
+    .search-item-body { font-size: 0.85rem; color: var(--ink-body); }
+    .search-item-sub { font-size: 0.79rem; color: var(--brand-blue-deep); font-weight: 600; }
+
+    /* Panels */
+    .panel { display: none; }
+    .panel.active { display: block; animation: panelIn 180ms ease; }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Today Issues Section (Clean Flat Grid — No Card Inside Card) */
+    .issues-block { margin-bottom: 28px; }
+    .issues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 14px;
+    }
+    .issue-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-left-width: 4px;
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    }
+    .issue-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .issue-card.sev-high { border-left-color: var(--sev-high-ink); }
+    .issue-card.sev-mid  { border-left-color: var(--brand-gold-bright); }
+    .issue-card.sev-info { border-left-color: var(--brand-blue); }
+    .issue-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .issue-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .issue-date { font-size: 0.76rem; color: var(--ink-muted); font-weight: 600; }
+    .issue-title { font-size: 0.98rem; font-weight: 800; color: var(--ink-strong); line-height: 1.4; }
+    .issue-detail { font-size: 0.87rem; color: var(--ink-body); line-height: 1.6; }
+
+    /* Routine Progress + Checklist */
+    .progress-bar-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .progress-wrap { flex: 1; min-width: 240px; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink-strong);
+      margin-bottom: 8px;
+    }
+    .progress-track {
+      height: 10px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface-soft);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: var(--radius-pill);
+      background: var(--brand-blue);
+      transition: transform 240ms ease;
+    }
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 14px;
+    }
+    .check-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 150ms ease, background-color 150ms ease, opacity 150ms ease;
+    }
+    .check-card:hover {
+      border-color: var(--border-brand);
+      background: var(--bg-surface-hover);
+    }
+    .check-card.done {
+      opacity: 0.62;
+      background: var(--bg-surface-soft);
+      border-color: var(--sev-ok-bd);
+    }
+    .check-card.done .check-title {
+      text-decoration: line-through;
+      color: var(--ink-muted);
+    }
+    .checkbox-ui {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      border: 2px solid var(--brand-blue);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--ink-inverse);
+      background: var(--bg-surface);
+      transition: background-color 140ms ease, border-color 140ms ease;
+    }
+    .check-card.done .checkbox-ui {
+      background: var(--sev-ok-ink);
+      border-color: var(--sev-ok-ink);
+    }
+    .check-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+    .check-title { font-size: 0.98rem; font-weight: 800; color: var(--ink-strong); margin-bottom: 4px; }
+    .check-detail { font-size: 0.86rem; color: var(--ink-body); }
+    .check-tip {
+      margin-top: 9px;
+      padding: 7px 11px;
+      border-radius: var(--radius-sm);
+      background: var(--brand-blue-soft);
+      border-left: 3px solid var(--brand-blue);
+      font-size: 0.81rem;
+      font-weight: 600;
+      color: var(--brand-blue-deep);
+    }
+
+    /* Core DB & Wiki DB */
+    .db-sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 16px;
+    }
+    .db-group {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .db-group-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--brand-blue-deep);
+      padding-bottom: 11px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .db-row {
+      padding: 11px 0;
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+    .db-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .db-key { font-size: 0.82rem; color: var(--ink-muted); font-weight: 700; }
+    .db-val { font-size: 0.96rem; font-weight: 800; color: var(--ink-strong); margin: 3px 0; }
+    .db-note { font-size: 0.82rem; color: var(--ink-body); }
+
+    /* Filter Chips */
+    .filter-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+    .chip {
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: inherit;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--ink-body);
+      cursor: pointer;
+      transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+    .chip:hover { border-color: var(--border-brand); color: var(--brand-blue-deep); }
+    .chip.active {
+      background: var(--brand-blue);
+      border-color: var(--brand-blue);
+      color: var(--ink-inverse);
+    }
+
+    /* Character Tier & Kibo Cards (Image-Bearing minmax(0,1fr)) */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+      gap: 16px;
+    }
+    .entity-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .entity-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-md);
+    }
+    .entity-card.tier-t0 {
+      border: 1.5px solid var(--border-gold);
+      box-shadow: 0 10px 26px rgba(180, 123, 17, 0.12);
+    }
+    .entity-media {
+      position: relative;
+      height: 162px;
+      background: linear-gradient(135deg, var(--brand-blue-soft), var(--brand-sky-soft));
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+    .entity-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+    .entity-placeholder {
+      text-align: center;
+      padding: 16px;
+      color: var(--brand-blue-deep);
+    }
+    .entity-placeholder .sub-name {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+    }
+    .media-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      pointer-events: none;
+    }
+    .media-badge-dark {
+      background: rgba(15, 23, 42, 0.78);
+      color: var(--ink-inverse);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .entity-body {
+      padding: 16px 18px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .entity-name {
+      font-size: 1.06rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+    }
+    .entity-source {
+      font-size: 0.79rem;
+      color: var(--brand-gold);
+      font-weight: 700;
+    }
+    .entity-desc {
+      font-size: 0.86rem;
+      color: var(--ink-body);
+    }
+    .entity-synergy {
+      margin-top: auto;
+      padding: 9px 11px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-soft);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.81rem;
+      font-weight: 600;
+      color: var(--brand-blue-deep);
+    }
+
+    /* Coupons & Events */
+    .event-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 14px;
+    }
+    .event-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: opacity 150ms ease, border-color 150ms ease;
+    }
+    .event-card.used {
+      opacity: 0.58;
+      background: var(--bg-surface-soft);
+      border-color: var(--sev-ok-bd);
+    }
+    .event-card.used .event-title-txt {
+      text-decoration: line-through;
+      color: var(--ink-muted);
+    }
+    .event-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .event-title-txt {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+    }
+    .code-box {
+      background: var(--bg-surface-soft);
+      border: 1.5px dashed var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--ink-strong);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .copy-btn {
+      padding: 5px 11px;
+      border-radius: 7px;
+      border: 1px solid var(--brand-blue);
+      background: var(--brand-blue);
+      color: var(--ink-inverse);
+      font-size: 0.77rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background-color 140ms ease;
+    }
+    .copy-btn:hover { background: var(--brand-blue-deep); }
+    .use-btn {
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-soft);
+      color: var(--ink-body);
+      font-size: 0.79rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      align-self: flex-end;
+      transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+    .use-btn:hover { border-color: var(--sev-ok-ink); color: var(--sev-ok-ink); }
+    .use-btn.is-used {
+      background: var(--sev-ok-bg);
+      border-color: var(--sev-ok-bd);
+      color: var(--sev-ok-ink);
+    }
+
+    /* Scrapbook */
+    .paste-zone {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-xl);
+      background: var(--bg-surface);
+      padding: 26px 20px;
+      text-align: center;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .paste-inputs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .paste-inputs input, .paste-inputs select {
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface-soft);
+      color: var(--ink-strong);
+      font-family: inherit;
+      font-size: 0.85rem;
+    }
+    .scrap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .scrap-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+    }
+    .scrap-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      cursor: zoom-in;
+      background: var(--bg-surface-soft);
+    }
+    .scrap-body {
+      padding: 13px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .del-btn {
+      background: var(--sev-high-bg);
+      border: 1px solid var(--sev-high-bd);
+      color: var(--sev-high-ink);
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Modal & Toast */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-modal);
+      backdrop-filter: blur(6px);
+      display: none;
+      place-items: center;
+      z-index: 100;
+      padding: 24px;
+    }
+    .modal.open { display: grid; }
+    .modal img {
+      max-width: 92vw;
+      max-height: 86vh;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+    }
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: var(--bg-toast);
+      color: var(--ink-inverse);
+      padding: 11px 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .site-footer {
+      margin-top: 44px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    }
+    @media (max-width: 640px) {
+      .wrap { padding: 0 14px; }
+      .hero-card { padding: 20px 18px 18px; }
+      .hero-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .stat-tile { padding: 11px 10px; }
+      .stat-num { font-size: 1.05rem; }
+      .checklist-grid, .db-sections, .event-list, .issues-grid, .search-result-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="world-backdrop" aria-hidden="true">
+    <div class="world-backdrop-art"></div>
+    <div class="world-backdrop-veil"></div>
+    <div class="world-dots"></div>
+    <svg class="world-ring" viewBox="0 0 400 400" fill="none">
+      <circle cx="200" cy="200" r="180" stroke="currentColor" stroke-width="1" stroke-dasharray="4 8" />
+      <circle cx="200" cy="200" r="134" stroke="currentColor" stroke-width="1.2" />
+      <path d="M200 12 L212 188 L388 200 L212 212 L200 388 L188 212 L12 200 L188 188 Z" stroke="currentColor" stroke-width="1" />
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <header class="topbar">
+      <a class="brand-mark" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">
+        <div class="brand-crest" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z" />
+          </svg>
+        </div>
+        <div class="brand-title-wrap">
+          <span class="brand-name">아주르 프로밀리아 공략 허브</span>
+          <span class="brand-sub">한국(넥슨) 전용 실시간 DB · 매일 오전 10시 자동 갱신</span>
+        </div>
+      </a>
+      <div class="topbar-actions">
+        <span id="syncPill" class="sync-pill"><span id="syncLabel">구글 시트 연결 중</span></span>
+        <button class="btn btn-primary" onclick="loadAllSheets(true)">새로고침</button>
+        <a class="btn" href="https://docs.google.com/spreadsheets/d/1GMHgu9DTYLdd5hWFEH9pPh2N8TFjslG-WSwTjMwupFY/edit" target="_blank" rel="noopener">구글 시트 보기</a>
+      </div>
+    </header>
+
+    <section class="hero-card" id="top">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z" />
+            </svg>
+            <span>한국(넥슨) 실시간 공략 대시보드</span>
+          </div>
+          <h1 class="hero-title">원하는 공략과 쿠폰을 가장 빠르게 찾으세요</h1>
+          <p class="hero-desc">오늘의 실전 이슈, 필수 루틴, 캐릭터 티어, 키보 가이드, 한국 전용 쿠폰까지 7개 시트를 한 번에 검색하고 바로 확인합니다.</p>
+          <div class="hero-search">
+            <span class="hero-search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input type="text" id="globalSearch" placeholder="전체 DB 통합 검색 (예: 도산소옥, 돌연변이, 천장, 쿠폰, 리세마라)" oninput="onGlobalSearch()" />
+            <button id="searchClear" class="search-clear" onclick="clearSearch()" title="검색 지우기" aria-label="검색 지우기">✕</button>
+          </div>
+          <div class="quick-tags">
+            <span class="quick-tags-label">빠른 검색</span>
+            <button class="quick-tag" onclick="quickSearch('도산소옥')">도산소옥</button>
+            <button class="quick-tag" onclick="quickSearch('돌연변이')">돌연변이</button>
+            <button class="quick-tag" onclick="quickSearch('천장')">천장</button>
+            <button class="quick-tag" onclick="quickSearch('리세마라')">리세마라</button>
+            <button class="quick-tag" onclick="quickSearch('쿠폰')">쿠폰</button>
+          </div>
+        </div>
+
+        <div class="hero-stats">
+          <button class="stat-tile" onclick="switchTab('day1')">
+            <div class="stat-icon" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+            </div>
+            <span class="stat-num" id="statIssues">0건</span>
+            <span class="stat-label">오늘의 실전 이슈</span>
+          </button>
+          <button class="stat-tile" onclick="switchTab('day1')">
+            <div class="stat-icon" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </div>
+            <span class="stat-num" id="statRoutine">0/0</span>
+            <span class="stat-label">필수 루틴 완료</span>
+          </button>
+          <button class="stat-tile" onclick="switchTab('events')">
+            <div class="stat-icon" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                <rect x="2" y="7" width="20" height="5"></rect>
+                <line x1="12" y1="22" x2="12" y2="7"></line>
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+              </svg>
+            </div>
+            <span class="stat-num" id="statEvents">0건</span>
+            <span class="stat-label">진행 중 한국 혜택</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <nav class="nav-bar" aria-label="공략 카테고리">
+      <div class="tabs" id="tabButtons">
+        <button class="tab-btn active" data-tab="day1">메인 · 이슈 &amp; 루틴 <span class="tab-badge" id="badge-day1">0/0</span></button>
+        <button class="tab-btn" data-tab="coredb">근본 DB</button>
+        <button class="tab-btn" data-tab="tier">티어 &amp; 조합</button>
+        <button class="tab-btn" data-tab="kibo">키보 &amp; 하우징</button>
+        <button class="tab-btn" data-tab="events">넥슨 쿠폰 &amp; 이벤트</button>
+        <button class="tab-btn" data-tab="wiki">공략 백과</button>
+        <button class="tab-btn" data-tab="scrap">내 스크랩북</button>
+      </div>
+    </nav>
+
+    <!-- UNIFIED GLOBAL SEARCH RESULTS -->
+    <section id="globalSearchPanel" class="global-search-panel">
+      <div class="section-head" style="margin-bottom: 4px;">
+        <div class="section-title">전체 DB 통합 검색 결과 <span id="searchCountBadge" class="pill pill-rec">0건</span></div>
+        <button class="btn btn-sm" onclick="clearSearch()">검색 닫기</button>
+      </div>
+      <div id="globalSearchResults" class="search-result-grid"></div>
+    </section>
+
+    <main>
+      <!-- TAB 1: MAIN (TODAY ISSUES + DAY 1 CHECKLIST) -->
+      <section id="panel-day1" class="panel active">
+        <div class="issues-block">
+          <div class="section-head">
+            <div>
+              <div class="section-title">오늘의 실전 이슈 &amp; 공략 팁 <span id="issueDateBadge" class="pill pill-t0">최신</span></div>
+              <div class="section-sub">홍보성 기사를 제외하고 실제 플레이에 도움이 되는 버그, 최적화, 공략, 쿠폰 소식만 매일 자동 선별합니다.</div>
+            </div>
+          </div>
+          <div class="issues-grid" id="todayIssuesGrid"></div>
+        </div>
+
+        <div class="section-head">
+          <div>
+            <div class="section-title">필수 루틴 체크리스트</div>
+            <div class="section-sub">카드를 클릭하면 완료 표시가 브라우저에 자동 저장됩니다.</div>
+          </div>
+          <button class="btn btn-sm" onclick="resetChecklist()">체크 초기화</button>
+        </div>
+        <div class="progress-bar-card">
+          <div class="progress-wrap">
+            <div class="progress-label">
+              <span>오늘의 필수 루틴 진행도</span>
+              <span id="progressText" style="color: var(--brand-blue-deep);">0 / 0 완료 (0%)</span>
+            </div>
+            <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+          </div>
+        </div>
+        <div class="checklist-grid" id="checklistGrid"></div>
+      </section>
+
+      <!-- TAB 2: CORE DB -->
+      <section id="panel-coredb" class="panel">
+        <div class="section-head">
+          <div>
+            <div class="section-title">변하지 않는 게임 근본 DB</div>
+            <div class="section-sub">뽑기 확률과 천장 구조, 재화 구분, PC/모바일 사양, 넥슨 쿠폰 입력 경로</div>
+          </div>
+        </div>
+        <div class="db-sections" id="coreDbGrid"></div>
+      </section>
+
+      <!-- TAB 3: TIER & CHARACTERS -->
+      <section id="panel-tier" class="panel">
+        <div class="section-head">
+          <div>
+            <div class="section-title">캐릭터 티어표 &amp; 조합 가이드</div>
+            <div class="section-sub">상시 5성 선택권은 초보자 뽑기와 도산소옥 픽업 결과를 확인한 뒤 사용하세요.</div>
+          </div>
+        </div>
+        <div class="filter-row" id="tierFilters"></div>
+        <div class="card-grid" id="tierGrid"></div>
+      </section>
+
+      <!-- TAB 4: KIBO & HOUSING -->
+      <section id="panel-kibo" class="panel">
+        <div class="section-head">
+          <div>
+            <div class="section-title">키보 도감 &amp; 포획·돌연변이·하우징 가이드</div>
+            <div class="section-sub">스타팅 3종 비교와 핵심 포획·육성·거점 배치 메커니즘</div>
+          </div>
+        </div>
+        <div class="card-grid" id="kiboGrid"></div>
+      </section>
+
+      <!-- TAB 5: COUPONS & EVENTS -->
+      <section id="panel-events" class="panel">
+        <div class="section-head">
+          <div>
+            <div class="section-title">한국(넥슨) 전용 쿠폰 &amp; 진행 중 이벤트</div>
+            <div class="section-sub">만료 항목은 자동 숨김 처리됩니다. 입력을 마친 쿠폰은 사용 완료 체크로 관리하세요.</div>
+          </div>
+          <button class="btn btn-sm" onclick="resetUsedCoupons()">쿠폰 체크 초기화</button>
+        </div>
+        <div class="event-list" id="eventsGrid"></div>
+      </section>
+
+      <!-- TAB 6: GAME WIKI DB -->
+      <section id="panel-wiki" class="panel">
+        <div class="section-head">
+          <div>
+            <div class="section-title">공략 백과 DB</div>
+            <div class="section-sub">게임 용어, 속성 조합, 파밍과 육성 핵심 팁이 누적되는 검색 전용 백과</div>
+          </div>
+        </div>
+        <div class="db-sections" id="wikiDbGrid"></div>
+      </section>
+
+      <!-- TAB 7: LOCAL SCRAPBOOK -->
+      <section id="panel-scrap" class="panel">
+        <div class="section-head">
+          <div>
+            <div class="section-title">내 자료 스크랩북</div>
+            <div class="section-sub">공략 지도나 티어표 이미지를 캡처한 뒤 이 화면에서 Ctrl+V로 즉시 저장하세요. (내 브라우저에만 보관)</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-sm" onclick="exportScraps()">백업(JSON)</button>
+            <label class="btn btn-sm" style="cursor:pointer;">복원<input type="file" accept=".json" style="display:none" onchange="importScraps(event)" /></label>
+          </div>
+        </div>
+        <div class="paste-zone" id="pasteZone">
+          <div style="font-size:1rem; font-weight:800; color:var(--ink-strong); margin-bottom:4px;">여기에 이미지를 Ctrl+V 로 붙여넣으세요</div>
+          <div style="font-size:0.83rem; color:var(--ink-muted);">제목과 카테고리를 먼저 적고 붙여넣으면 자동으로 분류됩니다.</div>
+          <div class="paste-inputs">
+            <input type="text" id="scrapTitle" placeholder="메모/제목 (예: 도산소옥 조합표)" />
+            <select id="scrapCat">
+              <option value="티어/조합">티어/조합</option>
+              <option value="지도/파밍">지도/파밍</option>
+              <option value="키보/하우징">키보/하우징</option>
+              <option value="기타 메모">기타 메모</option>
+            </select>
+            <label class="btn btn-primary btn-sm" style="cursor:pointer;">이미지 파일 추가<input type="file" accept="image/*" style="display:none" onchange="handleFileUpload(event)" /></label>
+          </div>
+        </div>
+        <div class="scrap-grid" id="scrapGrid"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>아주르 프로밀리아 한국(넥슨) 비공식 실시간 공략 대시보드</span>
+      <span>Google Sheets 실시간 연동 · 체크리스트와 스크랩북은 개인 브라우저에 저장됩니다</span>
+    </footer>
+  </div>
+
+  <div id="lightbox" class="modal" onclick="this.classList.remove('open')">
+    <img id="lightboxImg" src="" alt="스크랩 이미지 확대 미리보기" />
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const SPREADSHEET_ID = "1GMHgu9DTYLdd5hWFEH9pPh2N8TFjslG-WSwTjMwupFY";
+    const SHEET_TABS = ["Today_Issues", "Day1_Checklist", "Core_DB", "Tier_Characters", "Kibo_Guide", "Coupons_Events", "Game_Wiki_DB"];
+    const FALLBACK_DATA = {"Today_Issues": [{"Date": "2026-11-26", "Type": "꿀팁", "Severity": "중요", "Title": "상시 5성 선택권(50회) 절대 먼저 쓰지 말 것", "Detail": "초보자 뽑기(24재화/30회 랜덤 5성)와 도산소옥 한정 픽업 결과를 먼저 본 뒤 중복을 피해 선택권을 사용하는 것이 정석입니다.", "Source": "인벤/디시 종합"}, {"Date": "2026-11-26", "Type": "버그/최적화", "Severity": "보통", "Title": "PC 간헐적 스터터링 & 모바일 발열 이슈", "Detail": "오픈 당일 PC 환경에서 간헐적 프레임 드랍, 모바일 구역 전환 시 발열이 보고되고 있습니다. PC는 SSD 설치 및 그림자/이펙트 옵션 조절을 권장합니다.", "Source": "공식 라운지/커뮤니티"}, {"Date": "2026-11-26", "Type": "꿀팁", "Severity": "중요", "Title": "4성 서포터가 상시 5성 서포터보다 효율적", "Detail": "성림자, 한요요, 메이플, 애니스, 카타루 등 4성 서포터의 스킬 사이클 효율이 매우 높아 초반 육성 가성비가 압도적입니다.", "Source": "3차 CBT/오픈 공략"}, {"Date": "2026-11-26", "Type": "꿀팁", "Severity": "보통", "Title": "키보 인자 돌연변이(나선 아이콘) 덮어쓰기 주의", "Detail": "체력 소모 콘텐츠 후 키보 목록에 나선 아이콘이 뜨면 다음 판을 돌기 전에 즉시 확인하세요. 새 돌연변이가 뜨면 이전 후보가 덮어쓰기 됩니다.", "Source": "오픈 공략"}, {"Date": "2026-11-26", "Type": "쿠폰/이벤트", "Severity": "참고", "Title": "한국 넥슨 공용 쿠폰 미발표 (해외 코드 미적용)", "Detail": "대만·중국 서버 코드(AP1126 등)는 퍼블리셔가 달라 한국 넥슨 서버에서 작동하지 않습니다. 현재 국내는 우편함/출석 보상과 반올림피자 제휴 쿠폰만 유효합니다.", "Source": "넥슨 공식"}], "Day1_Checklist": [{"ID": "D1-01", "Category": "접속 직후", "Priority": "필수", "Title": "우편함 & 성림자 여행기 출석 수령", "Detail": "튜토리얼 직후 우편함의 사전등록/오픈 보상과 출석 메뉴(성림자 여행기) 보상부터 수령", "Tip": "리세마라 없이 바로 시작 권장 (5성 픽뚫 없음)"}, {"ID": "D1-02", "Category": "진행", "Priority": "필수", "Title": "메인 스토리 우선 밀기 & 성맥 노드 해금", "Detail": "초반 기능 해금과 워프/성맥 노드 활성화를 위해 메인 스토리를 최우선으로 진행", "Tip": "스토리 컷신이 잦으니 메인 위주로 속도감 있게 돌파"}, {"ID": "D1-03", "Category": "뽑기", "Priority": "필수", "Title": "초보자 뽑기 & 도산소옥 픽업 먼저 확인", "Detail": "초보자 배너(24재화/30회 랜덤 상시 5성)와 한정 픽업(도산소옥) 결과를 먼저 확인", "Tip": "상시 5성 선택권(50회)은 절대 먼저 쓰지 말 것!"}, {"ID": "D1-04", "Category": "재화 주의", "Priority": "주의", "Title": "빛의 기억 vs 별의 기억 구분 사용", "Detail": "빛의 기억=한정 픽업용, 별의 기억=상시 뽑기용. 범용/유료 재화를 상시 뽑기에 실수 소모 금지", "Tip": "한정 픽업은 90천장 100% 픽업 확정(픽뚫 없음)"}, {"ID": "D1-05", "Category": "하우징", "Priority": "필수", "Title": "게임 끄기 전 하우징 키보 배치 & 작물 파종", "Detail": "하우징 해금 즉시 작업 특성에 맞는 키보를 시설에 배치하고 농장 작물을 심어두기", "Tip": "오프라인 시간 동안 자원 생산이 핵심 루틴"}, {"ID": "D1-06", "Category": "이벤트", "Priority": "필수", "Title": "꼬마 협객 성장기 임무 진행 (무료 5성 페페)", "Detail": "임무 누적 35개 달성 시 5성 캐릭터 '페페'와 5성 영자 무료 지급", "Tip": "무소과금 핵심 전력, 첫날부터 임무 동선 체크"}, {"ID": "D1-07", "Category": "키보", "Priority": "권장", "Title": "야생 키보 포획 & 인자 돌연변이 확인", "Detail": "체력을 최대한 깎고 강공격 멈춘 뒤 스타링크 카드 사용. 키보 목록에 나선 아이콘 뜨면 즉시 확인", "Tip": "새 돌연변이가 뜨면 이전 후보를 덮어쓸 수 있음"}, {"ID": "D1-08", "Category": "이벤트", "Priority": "권장", "Title": "별의 기록·서막 / 새싹의 여정 보상 수령", "Detail": "메인·탐험 진행도 보상으로 별의 기억 대량 및 상시 5성 영자 선택권 확보", "Tip": "첫날 탐험 포인트 챙기면서 자연스럽게 클리어"}], "Core_DB": [{"Section": "BM/뽑기", "Key": "한정 캐릭터 (운명 관측)", "Value": "5성 기본 0.8% (종합 1.58%) / 90회 천장", "Note": "5성 픽뚫 없음(100% 픽업 획득), 천장 다음 배너 이월"}, {"Section": "BM/뽑기", "Key": "한정 영자/무기 (인연 관측)", "Value": "최대 80회 천장", "Note": "픽뚫 없음(100% 픽업 확정)"}, {"Section": "BM/뽑기", "Key": "초보자 관측", "Value": "재화 24회분으로 30회 뽑기", "Note": "랜덤 상시 5성 1명 확정"}, {"Section": "BM/뽑기", "Key": "상시 관측 (도약 관측)", "Value": "50회 달성 시 상시 5성 선택권", "Note": "이후 200회마다 추가 선택권 지급"}, {"Section": "재화 구분", "Key": "빛의 기억", "Value": "한정 픽업(운명 관측) 전용 재화", "Note": "가장 가치 높은 재화, 한정 배너에만 사용"}, {"Section": "재화 구분", "Key": "별의 기억", "Value": "상시 뽑기(도약 관측) 전용 재화", "Note": "탐험/이벤트 보상으로 대량 수급, 유료재화 전환 비추"}, {"Section": "시스템", "Key": "설치 용량 (PC)", "Value": "실제 약 85GB (권장 여유 160GB)", "Note": "SSD 설치 권장, 간헐적 스터터링 시 그래픽 옵션 조절"}, {"Section": "시스템", "Key": "설치 용량 (모바일)", "Value": "여유 공간 55GB 이상", "Note": "구역 전환·전투 시 발열 주의"}, {"Section": "시스템", "Key": "계정/리세마라", "Value": "넥슨 국내 서버 게스트 로그인 불가", "Note": "본인인증 계정 3개 제한, 1회 약 25분 소요 → 리세 비추천"}, {"Section": "쿠폰 경로", "Key": "인게임 / 웹 입력", "Value": "[설정] > [계정] > [넥슨 쿠폰]", "Note": "공식 홈페이지 [고객지원] > [쿠폰]에서도 입력 가능"}], "Tier_Characters": [{"Tier": "T0", "Name": "도산소옥", "Element": "바람", "Role": "메인 딜러", "Source": "한정 픽업 (~12/17 04:59)", "Summary": "단일·광역전 모두 최상급 평가를 받는 오픈 0순위 캐릭터", "Synergy": "바람 파티 핵심, 멧사와 시너지", "ImageURL": "https://cdn.playforum.net/news/photo/202611/635909_68279_3637.jpg"}, {"Tier": "T1", "Name": "모르윈", "Element": "상시", "Role": "메인 딜러", "Source": "상시 / 선택권", "Summary": "도산소옥과 함께 초반 메인 딜러로 가장 추천받는 상시 캐릭터", "Synergy": "메인 딜러 부재 시 50회 선택권 최우선 후보", "ImageURL": ""}, {"Tier": "T1", "Name": "루비", "Element": "불", "Role": "딜러/조합핵심", "Source": "상시 / 선택권", "Summary": "레벨·장비 의존도는 있으나 조합 완성 시 화력 최상급", "Synergy": "4성 한요요와 함께 '불 초월' 조합 완성", "ImageURL": ""}, {"Tier": "T1", "Name": "샬레", "Element": "상시", "Role": "딜러", "Source": "상시 / 선택권", "Summary": "육성 고점이 높은 딜러, 모르윈과 함께 메인 딜러 대안", "Synergy": "장비/레벨 세팅 후 진가 발휘", "ImageURL": ""}, {"Tier": "무료 5성", "Name": "페페", "Element": "배포", "Role": "주력/범용", "Source": "꼬마 협객 성장기 (임무 35개)", "Summary": "5성 영자와 함께 무료 배포되는 핵심 초반 전력", "Synergy": "무·소과금 초반 파티 고정 멤버", "ImageURL": ""}, {"Tier": "미래시/특화", "Name": "루루카", "Element": "상시", "Role": "미래시 추천", "Source": "상시 / 선택권", "Summary": "향후 메타를 고려한 선택권 후보", "Synergy": "장기 육성 관점 추천", "ImageURL": ""}, {"Tier": "미래시/특화", "Name": "멧사", "Element": "바람", "Role": "바람 파츠", "Source": "상시 / 선택권", "Summary": "바람 파티 및 돌파 지향 유저에게 추천", "Synergy": "도산소옥 바람 파티 시너지", "ImageURL": ""}, {"Tier": "4성 꿀캐", "Name": "성림자 / 한요요 / 메이플 / 애니스 / 카타루", "Element": "다속성", "Role": "서포터/서브", "Source": "기본/뽑기", "Summary": "실전 스킬 사이클에서 상시 5성 서포터보다 효율이 좋은 4성 핵심 라인업", "Synergy": "상시 5성 서포터보다 우선 육성 권장", "ImageURL": ""}], "Kibo_Guide": [{"Category": "스타팅", "Name": "새싹 여우", "Element": "나무", "Role": "범용 파티 지원", "Effect": "파티 전체 치명타 확률 상승 + 나무 각인", "Note": "가장 무난하고 범용성 높은 스타팅 추천", "ImageURL": "https://i.namu.wiki/i/--XN07itl9ITBabotjNjxLTZ-jA8uzVrnAR_Pm5unxkx489mIAeos1pjMujZLG6nMjIWbNG2gcwAsJdxvWBsmA.webp"}, {"Category": "스타팅", "Name": "불꽃 음메", "Element": "불", "Role": "딜러 화력 집중", "Effect": "자신과 짝꿍 캐릭터 공격력 상승", "Note": "메인 딜러(도산소옥/모르윈 등) 화력 몰아주기용", "ImageURL": ""}, {"Category": "스타팅", "Name": "꼬마 비버", "Element": "물", "Role": "아머 파괴 / 탐험", "Effect": "아머 파괴 특화 + 성장 후 수상 이동 가능", "Note": "오픈월드 탐험 및 브레이크 편의성 우수", "ImageURL": ""}, {"Category": "포획 팁", "Name": "야생 키보 포획", "Element": "공통", "Role": "포획 메커니즘", "Effect": "체력을 최대한 깎고 강공격을 멈춘 뒤 스타링크 카드 투척", "Note": "실수로 처치하지 않도록 막타 직전 딜 조절 필수", "ImageURL": ""}, {"Category": "육성 팁", "Name": "인자 돌연변이", "Element": "공통", "Role": "스펙업/파밍", "Effect": "체력 소모 콘텐츠 동행 시 확률 발생 (목록에 나선 아이콘 표시)", "Note": "다음 판 돌기 전 즉시 확인! 새 돌연변이 발생 시 이전 후보 덮어쓰기 주의", "ImageURL": ""}, {"Category": "하우징", "Name": "거점 생산 배치", "Element": "공통", "Role": "생활/자원", "Effect": "키보의 작업 특성에 맞춰 농장·생산 시설에 배치", "Note": "접속 종료 전 반드시 배치 및 작물 파종 확인", "ImageURL": ""}], "Coupons_Events": [{"Type": "제휴 쿠폰", "Region": "한국(KR)", "Title": "반올림피자 콜라보 (배민/요기요/쿠팡이츠)", "CodeOrReward": "포토카드(한정 프레임·칭호 + 1,500 유니·깨끗한 성맥 결정 2개) + 아크릴 스탠드", "Deadline": "2026-12-13", "Status": "진행중", "Note": "계정당 프레임/칭호 1회, 재화 쿠폰 최대 2회(서로 다른 번호). 쿠폰 유효기간 ~2027-03-02"}, {"Type": "제휴 쿠폰", "Region": "한국(KR)", "Title": "반올림피자 콜라보 (공식 앱)", "CodeOrReward": "포토카드 쿠폰 동일 + 리유저블 컵 1개", "Deadline": "2026-12-13", "Status": "진행중", "Note": "아크릴 스탠드 대신 리유저블 컵 증정 (24,900원~)"}, {"Type": "공용 쿠폰", "Region": "한국(KR)", "Title": "넥슨 공용 텍스트 코드", "CodeOrReward": "미발표 (우편함/출석 직접 지급)", "Deadline": "상시 확인", "Status": "대기중", "Note": "공개 즉시 업데이트 및 만료 시 자동 삭제"}, {"Type": "이벤트", "Region": "한국(KR)", "Title": "한정 픽업: 도산소옥 (운명 관측)", "CodeOrReward": "T0 바람 속성 메인 딜러 (90천장 픽뚫 없음)", "Deadline": "2026-12-17", "Status": "진행중", "Note": "오픈 0순위 픽업 목표 (04:59 종료)"}, {"Type": "이벤트", "Region": "한국(KR)", "Title": "꼬마 협객 성장기", "CodeOrReward": "임무 35개 달성 → 5성 페페 + 5성 영자", "Deadline": "오픈 이벤트", "Status": "진행중", "Note": "무료 5성 핵심 배포"}, {"Type": "이벤트", "Region": "한국(KR)", "Title": "별의 기록·서막 / 새싹의 여정", "CodeOrReward": "별의 기억 대량 + 상시 5성 영자 선택권", "Deadline": "오픈 이벤트", "Status": "진행중", "Note": "탐험·메인 진행 보상"}, {"Type": "이벤트", "Region": "한국(KR)", "Title": "꽃으로 맺어진 인연", "CodeOrReward": "도산소옥 관련 인게임 이벤트 (4성 영자 등)", "Deadline": "오픈 이벤트", "Status": "진행중", "Note": "초반 재화 및 장비 수급"}], "Game_Wiki_DB": [{"Category": "전투/속성", "Keyword": "불 초월 조합", "Summary": "루비(5성) + 한요요(4성) 핵심 시너지", "Detail": "상시 5성 루비는 장비 의존도가 있으나 4성 한요요와 편성하면 강력한 불 초월 조합이 완성됩니다."}, {"Category": "전투/속성", "Keyword": "바람 파티 조합", "Summary": "도산소옥(5성) + 멧사(5성)", "Detail": "현재 픽업 0티어 도산소옥을 메인 딜러로 세우고 바람 파츠인 멧사를 조합해 화력을 극대화합니다."}, {"Category": "뽑기/BM", "Keyword": "픽뚫 없음 (확정 천장)", "Summary": "한정 캐릭터 90회 / 한정 영자 80회 100% 확정", "Detail": "운명 관측(캐릭터)과 인연 관측(영자/무기) 모두 5성 픽뚫이 없으며 천장 스택이 다음 배너로 이월됩니다."}, {"Category": "재화/아이템", "Keyword": "빛의 기억 / 별의 기억", "Summary": "빛=한정 픽업용, 별=상시 뽑기용", "Detail": "범용 유료 재화를 실수로 상시(별의 기억)에 쓰지 않도록 주의해야 합니다."}, {"Category": "키보/육성", "Keyword": "스타링크 카드 (포획)", "Summary": "야생 키보 포획 아이템", "Detail": "야생 키보의 체력을 최대한 깎은 뒤 강공격을 멈추고 던져야 포획 성공률이 높습니다."}, {"Category": "키보/육성", "Keyword": "인자 돌연변이", "Summary": "체력 소모 콘텐츠 동행 시 확률 획득", "Detail": "키보 목록에 나선 아이콘이 뜨면 즉시 확인해 적용 여부를 결정해야 덮어쓰기를 방지합니다."}, {"Category": "하우징/생활", "Keyword": "오프라인 자원 생산", "Summary": "종료 전 키보 배치 & 작물 파종 필수", "Detail": "작업 특성에 맞는 키보를 시설에 배치해 두면 게임 종료 중에도 자원이 누적됩니다."}, {"Category": "시스템/계정", "Keyword": "리세마라 (넥슨 KR)", "Summary": "1회 약 25분 / 게스트 로그인 불가", "Detail": "본인인증 계정 3개 제한이 있고 픽뚫이 없어 리세 없이 바로 시작하는 것이 유리합니다."}]};
+
+    let DB = JSON.parse(JSON.stringify(FALLBACK_DATA));
+    let activeTierFilter = "전체";
+    let checkedMap = {};
+    let usedCouponMap = {};
+    try { checkedMap = JSON.parse(localStorage.getItem("ap_day1_checked_v1") || "{}"); } catch (e) {}
+    try { usedCouponMap = JSON.parse(localStorage.getItem("ap_used_coupons_v1") || "{}"); } catch (e) {}
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabId));
+      document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + tabId));
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    });
+
+    function quickSearch(term) {
+      const input = document.getElementById("globalSearch");
+      input.value = term;
+      onGlobalSearch();
+      document.getElementById("globalSearchPanel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function fetchSheetJSONP(sheetName) {
+      return new Promise((resolve, reject) => {
+        const cbName = "__gviz_cb_" + sheetName + "_" + Math.floor(Math.random() * 1e9);
+        const script = document.createElement("script");
+        let done = false;
+        const timer = setTimeout(() => { if (!done) { done = true; cleanup(); reject(new Error("timeout")); } }, 6500);
+        function cleanup() { clearTimeout(timer); delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); }
+        window[cbName] = (resp) => {
+          if (done) return;
+          done = true; cleanup();
+          try {
+            if (!resp || resp.status !== "ok" || !resp.table) return reject(new Error("invalid response"));
+            const cols = resp.table.cols.map(c => (c.label || c.id || "").trim());
+            const rows = (resp.table.rows || []).map(r => {
+              const obj = {};
+              cols.forEach((col, i) => {
+                const cell = r.c && r.c[i];
+                obj[col] = cell && cell.v !== null && cell.v !== undefined ? String(cell.v).trim() : "";
+              });
+              return obj;
+            }).filter(obj => Object.values(obj).some(v => v !== ""));
+            resolve(rows);
+          } catch (e) { reject(e); }
+        };
+        script.onerror = () => { if (!done) { done = true; cleanup(); reject(new Error("script error")); } };
+        script.src = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&headers=1&tqx=responseHandler:${cbName}&_ts=${Date.now()}`;
+        document.head.appendChild(script);
+      });
+    }
+
+    async function loadAllSheets(isManual = false) {
+      const pill = document.getElementById("syncPill");
+      const label = document.getElementById("syncLabel");
+      pill.className = "sync-pill";
+      label.textContent = "구글 시트 동기화 중...";
+
+      let successCount = 0;
+      await Promise.all(SHEET_TABS.map(async (tab) => {
+        try {
+          const rows = await fetchSheetJSONP(tab);
+          if (rows && rows.length > 0) { DB[tab] = rows; successCount++; }
+        } catch (e) {}
+      }));
+
+      const nowStr = new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+      if (successCount > 0) {
+        pill.className = "sync-pill live";
+        label.textContent = `실시간 연동됨 (${nowStr})`;
+        if (isManual) showToast("구글 시트 최신 데이터를 불러왔습니다.");
+      } else {
+        pill.className = "sync-pill fallback";
+        label.textContent = "로컬 캐시 모드";
+      }
+      renderAll();
+    }
+
+    function escapeHtml(str) {
+      return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function parseDeadlineDiff(deadline) {
+      const m = String(deadline || "").match(/(\d{4}-\d{2}-\d{2})/);
+      if (!m) return null;
+      const target = new Date(m[1] + "T23:59:59");
+      return Math.ceil((target - new Date()) / (1000 * 60 * 60 * 24));
+    }
+
+    function calcDDay(deadline) {
+      const diff = parseDeadlineDiff(deadline);
+      if (diff === null) return "";
+      if (diff > 0) return `D-${diff}`;
+      if (diff === 0) return "D-DAY";
+      return "종료";
+    }
+
+    function clearSearch() {
+      document.getElementById("globalSearch").value = "";
+      onGlobalSearch();
+    }
+
+    function onGlobalSearch() {
+      const q = (document.getElementById("globalSearch").value || "").trim().toLowerCase();
+      document.getElementById("searchClear").classList.toggle("show", q.length > 0);
+      const panel = document.getElementById("globalSearchPanel");
+      if (!q) {
+        panel.classList.remove("active");
+        return;
+      }
+      panel.classList.add("active");
+
+      const results = [];
+      const pushMatch = (tabLabel, title, body, sub) => results.push({ tabLabel, title, body, sub });
+
+      (DB.Today_Issues || []).forEach(r => {
+        if (Object.values(r).some(v => String(v).toLowerCase().includes(q)))
+          pushMatch("오늘의 이슈", r.Title, r.Detail, `${r.Date} (${r.Type})`);
+      });
+      (DB.Day1_Checklist || []).forEach(r => {
+        if (Object.values(r).some(v => String(v).toLowerCase().includes(q)))
+          pushMatch("필수 루틴", r.Title, r.Detail, r.Tip || r.Category);
+      });
+      (DB.Core_DB || []).forEach(r => {
+        if (Object.values(r).some(v => String(v).toLowerCase().includes(q)))
+          pushMatch("근본 DB", `${r.Key} : ${r.Value}`, r.Note, r.Section);
+      });
+      (DB.Tier_Characters || []).forEach(r => {
+        if (Object.values(r).some(v => String(v).toLowerCase().includes(q)))
+          pushMatch("캐릭터 티어", `[${r.Tier}] ${r.Name} (${r.Element} / ${r.Role})`, r.Summary, r.Synergy || r.Source);
+      });
+      (DB.Kibo_Guide || []).forEach(r => {
+        if (Object.values(r).some(v => String(v).toLowerCase().includes(q)))
+          pushMatch("키보/하우징", `[${r.Category}] ${r.Name} (${r.Element})`, r.Effect, r.Note);
+      });
+      (DB.Coupons_Events || []).forEach(r => {
+        const diff = parseDeadlineDiff(r.Deadline);
+        if (diff !== null && diff < 0) return;
+        if (Object.values(r).some(v => String(v).toLowerCase().includes(q)))
+          pushMatch("쿠폰/이벤트", r.Title, r.CodeOrReward, `${r.Deadline} ${r.Note ? "— " + r.Note : ""}`);
+      });
+      (DB.Game_Wiki_DB || []).forEach(r => {
+        if (Object.values(r).some(v => String(v).toLowerCase().includes(q)))
+          pushMatch("공략 백과", `[${r.Category}] ${r.Keyword}`, r.Summary, r.Detail);
+      });
+
+      document.getElementById("searchCountBadge").textContent = results.length + "건";
+      document.getElementById("globalSearchResults").innerHTML = results.map(it => `
+        <div class="search-item">
+          <div><span class="pill pill-rec">${escapeHtml(it.tabLabel)}</span></div>
+          <div class="search-item-title">${escapeHtml(it.title)}</div>
+          ${it.body ? `<div class="search-item-body">${escapeHtml(it.body)}</div>` : ""}
+          ${it.sub ? `<div class="search-item-sub">${escapeHtml(it.sub)}</div>` : ""}
+        </div>
+      `).join("") || `<p style="color:var(--ink-muted); font-size:0.88rem;">"${escapeHtml(q)}"에 대한 검색 결과가 없습니다. 다른 키워드(예: 도산소옥, 쿠폰, 돌연변이)로 검색해 보세요.</p>`;
+    }
+
+    function renderTodayIssues() {
+      const rows = DB.Today_Issues || [];
+      document.getElementById("statIssues").textContent = rows.length + "건";
+      if (rows.length && rows[0].Date) {
+        document.getElementById("issueDateBadge").textContent = rows[0].Date + " 기준";
+      }
+      document.getElementById("todayIssuesGrid").innerHTML = rows.map(r => {
+        const sev = String(r.Severity || "보통").trim();
+        const sevCls = sev === "중요" ? "sev-high" : (sev === "보통" ? "sev-mid" : "sev-info");
+        const pillCls = sev === "중요" ? "pill-must" : (sev === "보통" ? "pill-warn" : "pill-rec");
+        return `
+          <article class="issue-card ${sevCls}">
+            <div class="issue-meta">
+              <div class="issue-tags">
+                <span class="pill ${pillCls}">${escapeHtml(r.Type || "꿀팁")}</span>
+                <span class="pill pill-cat">${escapeHtml(sev)}</span>
+              </div>
+              <span class="issue-date">${escapeHtml(r.Source || r.Date)}</span>
+            </div>
+            <div class="issue-title">${escapeHtml(r.Title)}</div>
+            <div class="issue-detail">${escapeHtml(r.Detail)}</div>
+          </article>
+        `;
+      }).join("") || `<p style="color:var(--ink-muted); font-size:0.88rem;">등록된 오늘의 이슈가 없습니다.</p>`;
+    }
+
+    function getCheckKey(r, idx) { return String(r.ID || r.id || r.Title || ("item_" + idx)).trim(); }
+    function saveCheckedMap() { try { localStorage.setItem("ap_day1_checked_v1", JSON.stringify(checkedMap)); } catch (e) {} }
+    function toggleCheck(id) { if (!id) return; checkedMap[id] = !checkedMap[id]; saveCheckedMap(); renderDay1(); }
+    function resetChecklist() { checkedMap = {}; saveCheckedMap(); renderDay1(); showToast("필수 루틴 체크리스트를 초기화했습니다."); }
+
+    function renderDay1() {
+      const all = DB.Day1_Checklist || [];
+      const doneCount = all.filter((r, idx) => !!checkedMap[getCheckKey(r, idx)]).length;
+      const pct = all.length ? Math.round((doneCount / all.length) * 100) : 0;
+
+      document.getElementById("badge-day1").textContent = `${doneCount}/${all.length}`;
+      document.getElementById("statRoutine").textContent = `${doneCount}/${all.length}`;
+      document.getElementById("progressText").textContent = `${doneCount} / ${all.length} 완료 (${pct}%)`;
+      document.getElementById("progressFill").style.width = pct + "%";
+
+      document.getElementById("checklistGrid").innerHTML = all.map((r, idx) => {
+        const key = getCheckKey(r, idx);
+        const isDone = !!checkedMap[key];
+        const pClass = r.Priority === "필수" ? "pill-must" : (r.Priority === "주의" ? "pill-warn" : "pill-rec");
+        return `
+          <div class="check-card ${isDone ? "done" : ""}" data-check-id="${escapeHtml(key)}" role="checkbox" aria-checked="${isDone}" tabindex="0">
+            <div class="checkbox-ui">${isDone ? "✓" : ""}</div>
+            <div style="flex:1; min-width:0;">
+              <div class="check-meta">
+                <span class="pill ${pClass}">${escapeHtml(r.Priority || "체크")}</span>
+                <span class="pill pill-cat">${escapeHtml(r.Category)}</span>
+              </div>
+              <div class="check-title">${escapeHtml(r.Title)}</div>
+              <div class="check-detail">${escapeHtml(r.Detail)}</div>
+              ${r.Tip ? `<div class="check-tip">핵심 팁: ${escapeHtml(r.Tip)}</div>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("checklistGrid").addEventListener("click", (e) => {
+      const card = e.target.closest(".check-card");
+      if (card) toggleCheck(card.dataset.checkId);
+    });
+    document.getElementById("checklistGrid").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        const card = e.target.closest(".check-card");
+        if (card) { e.preventDefault(); toggleCheck(card.dataset.checkId); }
+      }
+    });
+
+    function renderCoreDB() {
+      const rows = (DB.Core_DB || []).filter(r => r.Section !== "공식 링크");
+      const groups = {};
+      rows.forEach(r => { const sec = r.Section || "기타"; if (!groups[sec]) groups[sec] = []; groups[sec].push(r); });
+      document.getElementById("coreDbGrid").innerHTML = Object.entries(groups).map(([sec, items]) => `
+        <div class="db-group">
+          <div class="db-group-title"><span>${escapeHtml(sec)}</span><span class="pill pill-cat">${items.length}항목</span></div>
+          ${items.map(it => `<div class="db-row"><div class="db-key">${escapeHtml(it.Key)}</div><div class="db-val">${escapeHtml(it.Value)}</div>${it.Note ? `<div class="db-note">${escapeHtml(it.Note)}</div>` : ""}</div>`).join("")}
+        </div>
+      `).join("");
+    }
+
+    function renderWikiDB() {
+      const rows = DB.Game_Wiki_DB || [];
+      const groups = {};
+      rows.forEach(r => { const sec = r.Category || "기타"; if (!groups[sec]) groups[sec] = []; groups[sec].push(r); });
+      document.getElementById("wikiDbGrid").innerHTML = Object.entries(groups).map(([sec, items]) => `
+        <div class="db-group">
+          <div class="db-group-title"><span>${escapeHtml(sec)}</span><span class="pill pill-cat">${items.length}항목</span></div>
+          ${items.map(it => `<div class="db-row"><div class="db-val" style="color:var(--brand-blue-deep);">${escapeHtml(it.Keyword)}</div><div class="db-key" style="color:var(--ink-strong); margin-bottom:3px;">${escapeHtml(it.Summary)}</div><div class="db-note">${escapeHtml(it.Detail)}</div></div>`).join("")}
+        </div>
+      `).join("");
+    }
+
+    function renderTier() {
+      const all = DB.Tier_Characters || [];
+      const tiers = ["전체", ...Array.from(new Set(all.map(r => r.Tier).filter(Boolean)))];
+      document.getElementById("tierFilters").innerHTML = tiers.map(t => `<button class="chip ${activeTierFilter === t ? "active" : ""}" onclick="activeTierFilter='${escapeHtml(t)}'; renderTier();">${escapeHtml(t)}</button>`).join("");
+      const rows = all.filter(r => activeTierFilter === "전체" || r.Tier === activeTierFilter);
+      document.getElementById("tierGrid").innerHTML = rows.map(r => {
+        const t = r.Tier || "";
+        const pillCls = t.includes("T0") ? "pill-t0" : (t.includes("T1") ? "pill-t1" : (t.includes("무료") ? "pill-free" : "pill-4s"));
+        const isT0 = t.includes("T0");
+        const starSvg = `<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
+        const mediaHtml = r.ImageURL
+          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="entity-placeholder" style="display:none;">${starSvg}<span class="sub-name">${escapeHtml(r.Name)}</span></div>`
+          : `<div class="entity-placeholder">${starSvg}<span class="sub-name">${escapeHtml(r.Element)} / ${escapeHtml(r.Role)}</span></div>`;
+        return `
+          <article class="entity-card ${isT0 ? "tier-t0" : ""}">
+            <div class="entity-media">
+              ${mediaHtml}
+              <div class="media-badges">
+                <span class="pill ${pillCls}">${escapeHtml(t)}</span>
+                <span class="pill media-badge-dark">${escapeHtml(r.Element)} / ${escapeHtml(r.Role)}</span>
+              </div>
+            </div>
+            <div class="entity-body">
+              <div class="entity-name">${escapeHtml(r.Name)}</div>
+              <div class="entity-source">획득처: ${escapeHtml(r.Source)}</div>
+              <div class="entity-desc">${escapeHtml(r.Summary)}</div>
+              ${r.Synergy ? `<div class="entity-synergy">시너지: ${escapeHtml(r.Synergy)}</div>` : ""}
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    function renderKibo() {
+      const rows = DB.Kibo_Guide || [];
+      const starSvg = `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
+      document.getElementById("kiboGrid").innerHTML = rows.map(r => {
+        const mediaHtml = r.ImageURL
+          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="entity-placeholder" style="display:none;">${starSvg}<span class="sub-name">${escapeHtml(r.Name)}</span></div>`
+          : `<div class="entity-placeholder">${starSvg}<span class="sub-name">${escapeHtml(r.Category)} / ${escapeHtml(r.Role)}</span></div>`;
+        return `
+          <article class="entity-card">
+            <div class="entity-media">
+              ${mediaHtml}
+              <div class="media-badges">
+                <span class="pill pill-rec">${escapeHtml(r.Category)}</span>
+                <span class="pill media-badge-dark">${escapeHtml(r.Element)}</span>
+              </div>
+            </div>
+            <div class="entity-body">
+              <div class="entity-name">${escapeHtml(r.Name)}</div>
+              <div class="entity-source">역할: ${escapeHtml(r.Role)}</div>
+              <div class="entity-desc">${escapeHtml(r.Effect)}</div>
+              ${r.Note ? `<div class="entity-synergy">참고: ${escapeHtml(r.Note)}</div>` : ""}
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => showToast("복사되었습니다: " + text));
+    }
+
+    function toggleCouponUsed(key) {
+      usedCouponMap[key] = !usedCouponMap[key];
+      try { localStorage.setItem("ap_used_coupons_v1", JSON.stringify(usedCouponMap)); } catch (e) {}
+      renderEvents();
+    }
+
+    function resetUsedCoupons() {
+      usedCouponMap = {};
+      try { localStorage.setItem("ap_used_coupons_v1", "{}"); } catch (e) {}
+      renderEvents();
+      showToast("쿠폰 사용 체크를 초기화했습니다.");
+    }
+
+    function renderEvents() {
+      const rows = (DB.Coupons_Events || []).filter(r => {
+        const reg = String(r.Region || "");
+        if (reg && !reg.includes("한국") && !reg.includes("KR")) return false;
+        const diff = parseDeadlineDiff(r.Deadline);
+        if (diff !== null && diff < 0) return false;
+        return true;
+      });
+
+      document.getElementById("statEvents").textContent = rows.length + "건";
+
+      document.getElementById("eventsGrid").innerHTML = rows.map((r, idx) => {
+        const key = String(r.Title || ("ev_" + idx)).trim();
+        const isUsed = !!usedCouponMap[key];
+        const dday = calcDDay(r.Deadline);
+        const statusCls = (r.Status || "").includes("진행") ? "pill-free" : ((r.Status || "").includes("대기") ? "pill-warn" : "pill-cat");
+        return `
+          <article class="event-card ${isUsed ? "used" : ""}">
+            <div class="event-top">
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <span class="pill pill-rec">${escapeHtml(r.Type)}</span>
+                <span class="pill ${statusCls}">${escapeHtml(r.Status)}</span>
+              </div>
+              ${dday ? `<span class="pill pill-t0">${dday}</span>` : `<span style="font-size:0.78rem; color:var(--ink-muted); font-weight:600;">${escapeHtml(r.Deadline)}</span>`}
+            </div>
+            <div class="event-title-txt">${escapeHtml(r.Title)}</div>
+            <div class="code-box">
+              <span style="word-break:break-word;">${escapeHtml(r.CodeOrReward)}</span>
+              <button class="copy-btn" onclick="copyText('${escapeHtml(r.CodeOrReward).replace(/'/g, "\\'")}')">복사</button>
+            </div>
+            ${r.Note ? `<div style="font-size:0.82rem; color:var(--ink-muted);">${escapeHtml(r.Note)}</div>` : ""}
+            <button class="use-btn ${isUsed ? "is-used" : ""}" data-coupon-key="${escapeHtml(key)}">
+              ${isUsed ? "사용 완료됨 (클릭해 취소)" : "사용 완료 체크"}
+            </button>
+          </article>`;
+      }).join("") || `<p style="color:var(--ink-muted);">현재 사용 가능한 한국(넥슨) 쿠폰과 이벤트가 없습니다.</p>`;
+    }
+
+    document.getElementById("eventsGrid").addEventListener("click", (e) => {
+      const btn = e.target.closest(".use-btn");
+      if (btn) toggleCouponUsed(btn.dataset.couponKey);
+    });
+
+    function renderAll() {
+      renderTodayIssues();
+      renderDay1();
+      renderCoreDB();
+      renderTier();
+      renderKibo();
+      renderEvents();
+      renderWikiDB();
+      if (document.getElementById("globalSearch").value.trim()) onGlobalSearch();
+    }
+
+    let scrapDB = null;
+    function initScrapDB() {
+      try {
+        const req = indexedDB.open("AzurPromiliaScrapbook", 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains("scraps")) db.createObjectStore("scraps", { keyPath: "id" });
+        };
+        req.onsuccess = (e) => { scrapDB = e.target.result; renderScraps(); };
+      } catch (e) {}
+    }
+
+    function saveScrap(dataUrl) {
+      if (!scrapDB) return;
+      const titleInput = document.getElementById("scrapTitle");
+      const catInput = document.getElementById("scrapCat");
+      const item = { id: Date.now(), title: titleInput.value.trim() || ("캡처 자료 " + new Date().toLocaleTimeString("ko-KR", { hour:"2-digit", minute:"2-digit" })), category: catInput.value, image: dataUrl, createdAt: new Date().toLocaleDateString("ko-KR") };
+      const tx = scrapDB.transaction("scraps", "readwrite");
+      tx.objectStore("scraps").add(item);
+      tx.oncomplete = () => { titleInput.value = ""; renderScraps(); showToast("스크랩북에 저장되었습니다."); };
+    }
+
+    function deleteScrap(id) {
+      if (!scrapDB) return;
+      const tx = scrapDB.transaction("scraps", "readwrite");
+      tx.objectStore("scraps").delete(id);
+      tx.oncomplete = () => renderScraps();
+    }
+
+    function renderScraps() {
+      if (!scrapDB) return;
+      const tx = scrapDB.transaction("scraps", "readonly");
+      const req = tx.objectStore("scraps").getAll();
+      req.onsuccess = () => {
+        const items = (req.result || []).sort((a, b) => b.id - a.id);
+        document.getElementById("scrapGrid").innerHTML = items.map(it => `
+          <div class="scrap-card">
+            <img src="${it.image}" alt="${escapeHtml(it.title)}" onclick="openLightbox('${it.image}')" />
+            <div class="scrap-body">
+              <div style="min-width:0;">
+                <span class="pill pill-cat" style="margin-bottom:4px;">${escapeHtml(it.category)}</span>
+                <div style="font-size:0.88rem; font-weight:700; color:var(--ink-strong);">${escapeHtml(it.title)}</div>
+              </div>
+              <button class="del-btn" onclick="deleteScrap(${it.id})">삭제</button>
+            </div>
+          </div>
+        `).join("") || `<p style="color:var(--ink-muted); grid-column:1/-1; text-align:center; padding:24px;">아직 저장된 캡처가 없습니다. 공략 이미지를 복사한 뒤 이 탭에서 Ctrl+V 해보세요.</p>`;
+      };
+    }
+
+    function openLightbox(src) { document.getElementById("lightboxImg").src = src; document.getElementById("lightbox").classList.add("open"); }
+    function handleFileUpload(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => saveScrap(ev.target.result); reader.readAsDataURL(file); }
+
+    window.addEventListener("paste", (e) => {
+      if (!document.getElementById("panel-scrap").classList.contains("active")) return;
+      const items = (e.clipboardData || {}).items || [];
+      for (const it of items) {
+        if (it.type && it.type.startsWith("image/")) {
+          const blob = it.getAsFile();
+          const reader = new FileReader();
+          reader.onload = (ev) => saveScrap(ev.target.result);
+          reader.readAsDataURL(blob);
+          e.preventDefault();
+          break;
+        }
+      }
+    });
+
+    function exportScraps() {
+      if (!scrapDB) return;
+      const tx = scrapDB.transaction("scraps", "readonly");
+      const req = tx.objectStore("scraps").getAll();
+      req.onsuccess = () => {
+        const blob = new Blob([JSON.stringify(req.result || [])], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "azur_promilia_scrapbook_backup.json";
+        a.click();
+      };
+    }
+
+    function importScraps(e) {
+      const file = e.target.files[0];
+      if (!file || !scrapDB) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const arr = JSON.parse(ev.target.result);
+          const tx = scrapDB.transaction("scraps", "readwrite");
+          const store = tx.objectStore("scraps");
+          arr.forEach(item => store.put(item));
+          tx.oncomplete = () => { renderScraps(); showToast("스크랩북 백업을 복원했습니다."); };
+        } catch (err) { showToast("올바른 백업 파일이 아닙니다."); }
+      };
+      reader.readAsText(file);
+    }
+
+    renderAll();
+    initScrapDB();
+    loadAllSheets(false);
+  </script>
+</body>
+</html>
