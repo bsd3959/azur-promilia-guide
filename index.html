@@ -1014,6 +1014,74 @@
     }
     .pending-box strong { color: var(--brand-blue-deep); }
 
+    /* Namuwiki-Style Character Profile Modal */
+    .char-profile-grid {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 18px;
+      margin-bottom: 18px;
+      align-items: start;
+    }
+    .char-portrait-box {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1.5px solid var(--border-strong);
+      background: linear-gradient(135deg, var(--brand-blue-soft), var(--brand-sky-soft));
+      aspect-ratio: 3 / 4;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .char-portrait-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .char-spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-solid);
+      font-size: 0.86rem;
+    }
+    .char-spec-table th {
+      width: 108px;
+      text-align: left;
+      padding: 9px 12px;
+      background: var(--brand-blue-soft);
+      color: var(--brand-blue-deep);
+      font-weight: 800;
+      border-bottom: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-subtle);
+    }
+    .char-spec-table td {
+      padding: 9px 12px;
+      color: var(--ink-strong);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .char-spec-table tr:last-child th,
+    .char-spec-table tr:last-child td { border-bottom: none; }
+    .entity-card.clickable { cursor: pointer; }
+    .entity-more-bar {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--brand-blue);
+    }
+    @media (max-width: 720px) {
+      .char-profile-grid { grid-template-columns: minmax(0, 1fr); }
+      .char-portrait-box { max-width: 220px; margin: 0 auto; }
+    }
+
     /* Filter Chips */
     .filter-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
     .chip {
@@ -1517,8 +1585,8 @@
       <section id="panel-tier" class="panel">
         <div class="section-head">
           <div>
-            <div class="section-title">캐릭터 티어표 &amp; 조합 가이드</div>
-            <div class="section-sub">상시 5성 선택권은 초보자 뽑기와 도산소옥 픽업 결과를 확인한 뒤 사용하세요.</div>
+            <div class="section-title">캐릭터 티어표 &amp; 상세 도감 DB</div>
+            <div class="section-sub">캐릭터 카드를 클릭하면 나무위키 스타일 프로필(종족·무기·배경 스토리·스펙·스킬·실전 팁·세팅)을 볼 수 있습니다.</div>
           </div>
         </div>
         <div class="filter-row" id="tierFilters"></div>
@@ -2033,21 +2101,87 @@
       `).join("");
     }
 
+    function openCharModal(charIdx) {
+      const rows = DB.Tier_Characters || [];
+      const c = rows[charIdx];
+      if (!c) return;
+      const t = c.Tier || "";
+      const pillCls = t.includes("T0") ? "pill-t0" : (t.includes("T1") ? "pill-t1" : (t.includes("무료") ? "pill-free" : "pill-4s"));
+      const starSvg = `<svg width="42" height="42" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
+      const portraitHtml = c.ImageURL
+        ? `<img src="${escapeHtml(c.ImageURL)}" alt="${escapeHtml(c.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="entity-placeholder" style="display:none;">${starSvg}<span class="sub-name">${escapeHtml(c.Name)}</span></div>`
+        : `<div class="entity-placeholder">${starSvg}<span class="sub-name">${escapeHtml(c.Name)}</span></div>`;
+
+      const specRows = [
+        ["등급 / 티어", `${c.Rarity || (t.includes("4성") ? "4성" : "5성")} (${t || "-"})`],
+        ["속성", c.Element || "확인 중"],
+        ["종족 / 소속", c.Race || "추가 검증 중"],
+        ["무기", c.Weapon || "추가 검증 중"],
+        ["포지션", c.Role || "-"],
+        ["획득처", c.Source || "-"]
+      ];
+
+      let detailBlocks = "";
+      if (c.Story && c.Story.trim()) {
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">배경 스토리 &amp; 설정</div><div class="guide-section-body">${escapeHtml(c.Story)}</div></div>`;
+      }
+      if (c.StatsNote && c.StatsNote.trim()) {
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">스펙 &amp; 포지션 특징</div><div class="guide-section-body">${escapeHtml(c.StatsNote)}</div></div>`;
+      }
+      if (c.Skills && c.Skills.trim()) {
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">핵심 스킬 &amp; 전투 메커니즘</div><div class="guide-section-body">${escapeHtml(c.Skills)}</div></div>`;
+      }
+      if ((c.CombatTips && c.CombatTips.trim()) || (c.Synergy && c.Synergy.trim())) {
+        const tipBody = [c.CombatTips, c.Synergy ? `추천 시너지: ${c.Synergy}` : ""].filter(Boolean).join("\n\n");
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">실전 운용 팁 &amp; 조합</div><div class="guide-section-body">${escapeHtml(tipBody)}</div></div>`;
+      }
+      if (c.BuildNote && c.BuildNote.trim()) {
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">추천 영자 · 장비 · 키보 세팅</div><div class="guide-section-body">${escapeHtml(c.BuildNote)}</div></div>`;
+      }
+
+      document.getElementById("guideModalContent").innerHTML = `
+        <div class="guide-modal-head">
+          <div style="min-width:0;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <span class="pill ${pillCls}">${escapeHtml(t || "캐릭터")}</span>
+              <span class="pill pill-rec">${escapeHtml(c.Element || "속성")}</span>
+              ${c.Race ? `<span class="pill pill-cat">${escapeHtml(c.Race)}</span>` : ""}
+            </div>
+            <h2 class="guide-modal-title" id="guideModalTitle">${escapeHtml(c.Name)}</h2>
+            <div class="guide-modal-summary">${escapeHtml(c.Summary || "")}</div>
+          </div>
+          <button class="btn btn-sm" onclick="closeGuideModal()">닫기</button>
+        </div>
+        <div class="char-profile-grid">
+          <div class="char-portrait-box">${portraitHtml}</div>
+          <table class="char-spec-table">
+            <tbody>
+              ${specRows.map(([k, v]) => `<tr><th>${escapeHtml(k)}</th><td>${escapeHtml(v)}</td></tr>`).join("")}
+            </tbody>
+          </table>
+        </div>
+        ${detailBlocks || `<div class="pending-box">상세 프로필 데이터를 추가 검증 중입니다.</div>`}
+      `;
+      document.getElementById("guideModal").classList.add("open");
+    }
+
     function renderTier() {
       const all = DB.Tier_Characters || [];
       const tiers = ["전체", ...Array.from(new Set(all.map(r => r.Tier).filter(Boolean)))];
       document.getElementById("tierFilters").innerHTML = tiers.map(t => `<button class="chip ${activeTierFilter === t ? "active" : ""}" onclick="activeTierFilter='${escapeHtml(t)}'; renderTier();">${escapeHtml(t)}</button>`).join("");
-      const rows = all.filter(r => activeTierFilter === "전체" || r.Tier === activeTierFilter);
+      const indexed = all.map((r, idx) => ({ ...r, __idx: idx }));
+      const rows = indexed.filter(r => activeTierFilter === "전체" || r.Tier === activeTierFilter);
       document.getElementById("tierGrid").innerHTML = rows.map(r => {
         const t = r.Tier || "";
         const pillCls = t.includes("T0") ? "pill-t0" : (t.includes("T1") ? "pill-t1" : (t.includes("무료") ? "pill-free" : "pill-4s"));
         const isT0 = t.includes("T0");
+        const hasProfile = Boolean(r.Story || r.Weapon || r.CombatTips);
         const starSvg = `<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z"/></svg>`;
         const mediaHtml = r.ImageURL
           ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="entity-placeholder" style="display:none;">${starSvg}<span class="sub-name">${escapeHtml(r.Name)}</span></div>`
           : `<div class="entity-placeholder">${starSvg}<span class="sub-name">${escapeHtml(r.Element)} / ${escapeHtml(r.Role)}</span></div>`;
         return `
-          <article class="entity-card ${isT0 ? "tier-t0" : ""}">
+          <article class="entity-card clickable ${isT0 ? "tier-t0" : ""}" onclick="openCharModal(${r.__idx})" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCharModal(${r.__idx});}">
             <div class="entity-media">
               ${mediaHtml}
               <div class="media-badges">
@@ -2060,6 +2194,10 @@
               <div class="entity-source">획득처: ${escapeHtml(r.Source)}</div>
               <div class="entity-desc">${escapeHtml(r.Summary)}</div>
               ${r.Synergy ? `<div class="entity-synergy">시너지: ${escapeHtml(r.Synergy)}</div>` : ""}
+              <div class="entity-more-bar">
+                <span>${hasProfile ? "상세 프로필 등록됨" : "기본 프로필"}</span>
+                <span>프로필 열기 →</span>
+              </div>
             </div>
           </article>`;
       }).join("");
