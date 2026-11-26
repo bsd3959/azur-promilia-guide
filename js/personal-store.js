@@ -1,4 +1,4 @@
-/* Personal Game Companion Store (Local-Only, Schema v2, 05:00 KST Reset, Legacy Compatible) */
+/* Personal Game Companion Store (Local-Only, Schema v2, 05:00 KST Reset, Daily Diff Timeline, Legacy Compatible) */
 (function (global) {
   "use strict";
 
@@ -6,7 +6,7 @@
   const LEGACY_DAY1_KEY = "ap_day1_checked_v1";
   const LEGACY_COUPON_KEY = "ap_used_coupons_v1";
   const SCHEMA_VERSION = 2;
-  const DAILY_RESET_HOUR_KST = 5; // 한국(넥슨) 서버 일일 초기화 05:00 KST, 주간 초기화 월요일 05:00 KST
+  const DAILY_RESET_HOUR_KST = 5;
 
   const DEFAULT_DAILY_TASKS = [
     { id: "daily_login", label: "접속 보상 · 우편함 · 출석 수령", note: "매일 05:00 KST 초기화" },
@@ -33,7 +33,7 @@
       day: kst.getDate(),
       hour: kst.getHours(),
       minute: kst.getMinutes(),
-      dayOfWeek: kst.getDay() // 0=Sun, 1=Mon ... 6=Sat
+      dayOfWeek: kst.getDay()
     };
   }
 
@@ -44,22 +44,21 @@
     return `${y}-${m}-${day}`;
   }
 
+  function getTodayKSTDateStr(nowDate) {
+    return formatYMD(getKSTParts(nowDate).kst);
+  }
+
   function getCurrentDailyCycleKey(nowDate) {
     const { kst, hour } = getKSTParts(nowDate);
     const shifted = new Date(kst.getTime());
-    if (hour < DAILY_RESET_HOUR_KST) {
-      shifted.setDate(shifted.getDate() - 1);
-    }
+    if (hour < DAILY_RESET_HOUR_KST) shifted.setDate(shifted.getDate() - 1);
     return formatYMD(shifted);
   }
 
   function getCurrentWeeklyCycleKey(nowDate) {
     const { kst, hour } = getKSTParts(nowDate);
     const shifted = new Date(kst.getTime());
-    if (hour < DAILY_RESET_HOUR_KST) {
-      shifted.setDate(shifted.getDate() - 1);
-    }
-    // Monday-based week start (05:00 KST Monday)
+    if (hour < DAILY_RESET_HOUR_KST) shifted.setDate(shifted.getDate() - 1);
     const dow = shifted.getDay();
     const diffToMon = dow === 0 ? -6 : 1 - dow;
     shifted.setDate(shifted.getDate() + diffToMon);
@@ -95,14 +94,8 @@
         dailyResetHourKST: DAILY_RESET_HOUR_KST,
         weeklyResetDayKST: 1
       },
-      dailyCycle: {
-        key: dailyKey,
-        checked: {}
-      },
-      weeklyCycle: {
-        key: weeklyKey,
-        checked: {}
-      },
+      dailyCycle: { key: dailyKey, checked: {} },
+      weeklyCycle: { key: weeklyKey, checked: {} },
       cycleArchive: [],
       day1Checked: {},
       usedCoupons: {},
@@ -117,7 +110,9 @@
         updatedAt: null
       },
       ownedChars: {},
-      growthHistory: []
+      history: [],
+      growthHistory: [],
+      lastConsultMemo: ""
     };
   }
 
@@ -138,6 +133,19 @@
   function migrateAndNormalize(raw) {
     const base = createEmptyState();
     if (!raw || typeof raw !== "object") return base;
+
+    const rawHistory = Array.isArray(raw.history) && raw.history.length
+      ? raw.history
+      : (Array.isArray(raw.growthHistory) ? raw.growthHistory : []);
+
+    const normalizedHistory = rawHistory.slice(0, 60).map(item => ({
+      id: item.id || Date.now(),
+      date: item.date || (item.recordedAt ? formatYMD(getKSTParts(new Date(item.recordedAt)).kst) : getTodayKSTDateStr()),
+      recordedAt: item.recordedAt || new Date().toISOString(),
+      note: String(item.note || "성장 현황 스냅샷"),
+      diffs: Array.isArray(item.diffs) ? item.diffs : [],
+      snapshot: item.snapshot || {}
+    }));
 
     const merged = {
       ...base,
@@ -167,7 +175,9 @@
         updatedAt: (raw.profile && raw.profile.updatedAt) || null
       },
       ownedChars: raw.ownedChars && typeof raw.ownedChars === "object" ? { ...raw.ownedChars } : {},
-      growthHistory: Array.isArray(raw.growthHistory) ? raw.growthHistory.slice(0, 60) : []
+      history: normalizedHistory,
+      growthHistory: normalizedHistory,
+      lastConsultMemo: String(raw.lastConsultMemo || "")
     };
 
     return rolloverCyclesIfNeeded(merged);
@@ -214,7 +224,6 @@
 
     if (!raw) {
       raw = createEmptyState();
-      // Legacy compatibility: import existing v1 keys without losing user checks
       try {
         const legacyDay1 = safeParseJSON(localStorage.getItem(LEGACY_DAY1_KEY));
         if (legacyDay1 && typeof legacyDay1 === "object") raw.day1Checked = legacyDay1;
@@ -234,12 +243,107 @@
 
   function saveState(state) {
     state.updatedAt = new Date().toISOString();
+    state.growthHistory = state.history || [];
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      // Mirror legacy keys so rollback never loses checks
       localStorage.setItem(LEGACY_DAY1_KEY, JSON.stringify(state.day1Checked || {}));
       localStorage.setItem(LEGACY_COUPON_KEY, JSON.stringify(state.usedCoupons || {}));
     } catch (e) {}
+  }
+
+  function computeSnapshotDiffs(prevSnap, nextSnap) {
+    if (!prevSnap || typeof prevSnap !== "object") return ["최초 기록"];
+    const diffs = [];
+
+    const numFields = [
+      ["accountLevel", "계정 Lv", false],
+      ["lightMemory", "빛의 기억", true],
+      ["starMemory", "별의 기억", true],
+      ["redstone", "레드스톤", true]
+    ];
+
+    numFields.forEach(([key, label, showDelta]) => {
+      const a = prevSnap[key];
+      const b = nextSnap[key];
+      if (a !== null && a !== undefined && b !== null && b !== undefined && a !== b) {
+        const delta = b - a;
+        if (showDelta) {
+          diffs.push(`${label} ${delta > 0 ? "+" : ""}${delta} (${a}→${b})`);
+        } else {
+          diffs.push(`${label}.${a}→${b}`);
+        }
+      } else if ((a === null || a === undefined) && b !== null && b !== undefined) {
+        diffs.push(`${label} ${b} 등록`);
+      }
+    });
+
+    const prevChars = prevSnap.ownedMap || {};
+    const nextChars = nextSnap.ownedMap || {};
+    Object.entries(nextChars).forEach(([id, cur]) => {
+      const old = prevChars[id];
+      if (!old) {
+        diffs.push(`신규 획득: ${cur.name}`);
+      } else {
+        if (old.level !== null && cur.level !== null && old.level !== cur.level) {
+          diffs.push(`${cur.name} Lv.${old.level}→${cur.level}`);
+        } else if (old.level === null && cur.level !== null) {
+          diffs.push(`${cur.name} Lv.${cur.level}`);
+        }
+        if (old.breakthrough !== null && cur.breakthrough !== null && old.breakthrough !== cur.breakthrough) {
+          diffs.push(`${cur.name} ${old.breakthrough}돌→${cur.breakthrough}돌`);
+        }
+      }
+    });
+
+    return diffs.length ? diffs : ["수치 변동 없음"];
+  }
+
+  function buildCurrentSnapshotObject(state) {
+    const ownedMap = {};
+    const ownedList = [];
+    Object.entries(state.ownedChars || {}).forEach(([id, v]) => {
+      if (v && v.owned) {
+        ownedMap[id] = { name: v.name || id, level: v.level, breakthrough: v.breakthrough };
+        ownedList.push(ownedMap[id]);
+      }
+    });
+    return {
+      accountLevel: state.profile.accountLevel,
+      storyProgress: state.profile.storyProgress,
+      lightMemory: state.profile.lightMemory,
+      starMemory: state.profile.starMemory,
+      redstone: state.profile.redstone,
+      currentGoal: state.profile.currentGoal,
+      ownedCount: ownedList.length,
+      ownedMap,
+      ownedSummary: ownedList.map(c => `${c.name}${c.level !== null ? `(Lv.${c.level})` : ""}`).join(", ")
+    };
+  }
+
+  function recordGrowthSnapshot(state, noteText) {
+    const list = state.history || [];
+    const prevSnap = list.length ? list[0].snapshot : null;
+    const nextSnap = buildCurrentSnapshotObject(state);
+    const diffs = computeSnapshotDiffs(prevSnap, nextSnap);
+
+    const entry = {
+      id: Date.now(),
+      date: getTodayKSTDateStr(),
+      recordedAt: new Date().toISOString(),
+      note: String(noteText || "").trim() || "계정 현황 기록",
+      diffs,
+      snapshot: nextSnap
+    };
+
+    state.history = [entry, ...list].slice(0, 60);
+    state.growthHistory = state.history;
+    saveState(state);
+    return entry;
+  }
+
+  function getLatestSnapshot(state) {
+    const list = state.history || [];
+    return list.length ? list[0] : null;
   }
 
   function buildBackupPayload(state) {
@@ -265,43 +369,12 @@
     return migrated;
   }
 
-  function recordGrowthSnapshot(state, noteText) {
-    const ownedList = Object.entries(state.ownedChars || {})
-      .filter(([, v]) => v && v.owned)
-      .map(([id, v]) => ({
-        id,
-        name: v.name || id,
-        level: v.level,
-        breakthrough: v.breakthrough
-      }));
-
-    const entry = {
-      id: Date.now(),
-      recordedAt: new Date().toISOString(),
-      note: String(noteText || "").trim() || "성장 현황 스냅샷 저장",
-      snapshot: {
-        accountLevel: state.profile.accountLevel,
-        storyProgress: state.profile.storyProgress,
-        lightMemory: state.profile.lightMemory,
-        starMemory: state.profile.starMemory,
-        redstone: state.profile.redstone,
-        currentGoal: state.profile.currentGoal,
-        ownedCount: ownedList.length,
-        ownedSummary: ownedList.map(c => `${c.name}${c.level !== null ? `(Lv.${c.level})` : ""}`).join(", ")
-      }
-    };
-
-    state.growthHistory.unshift(entry);
-    state.growthHistory = state.growthHistory.slice(0, 60);
-    saveState(state);
-    return entry;
-  }
-
   global.APPersonalStore = {
     SCHEMA_VERSION,
     DAILY_RESET_HOUR_KST,
     DEFAULT_DAILY_TASKS,
     DEFAULT_WEEKLY_TASKS,
+    getTodayKSTDateStr,
     getNextResetInfo,
     makeCharId,
     normalizeNumberOrNull,
@@ -309,6 +382,8 @@
     saveState,
     buildBackupPayload,
     validateAndImportBackup,
-    recordGrowthSnapshot
+    recordGrowthSnapshot,
+    getLatestSnapshot,
+    buildCurrentSnapshotObject
   };
 })(window);

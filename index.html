@@ -1287,6 +1287,250 @@
       cursor: pointer;
     }
     .owned-edit-btn:hover { background: var(--brand-blue); color: var(--ink-inverse); }
+
+    /* Horizontal Character List Card Header (No Portrait Cropping) */
+    .char-card-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 16px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: linear-gradient(135deg, rgba(235, 239, 255, 0.55), rgba(255, 255, 255, 0.92));
+    }
+    .char-card-thumb {
+      width: 100px;
+      height: 100px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-surface-solid);
+      border: 1.5px solid var(--border-strong);
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .char-card-thumb img {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      object-position: center;
+    }
+    .char-card-thumb .char-fallback-circle {
+      width: 64px;
+      height: 64px;
+      margin: 0;
+      font-size: 1.45rem;
+    }
+    .char-card-head-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .char-card-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+
+    /* Detailed Modal: Skills, Highlights, Breakthrough, Loadout Visual Cards */
+    .skill-summary-callout {
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: var(--brand-blue-soft);
+      border-left: 4px solid var(--brand-blue);
+      color: var(--ink-strong);
+      font-size: 0.87rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.55;
+    }
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .skill-row-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-solid);
+      border: 1px solid var(--border-subtle);
+    }
+    .skill-icon-slot {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-soft);
+    }
+    .skill-icon-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .skill-icon-fallback {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      color: var(--ink-inverse);
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.1;
+    }
+    .skill-row-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .skill-row-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--ink-strong);
+      margin-bottom: 4px;
+    }
+    .skill-row-desc {
+      font-size: 0.85rem;
+      color: var(--ink-body);
+      line-height: 1.62;
+    }
+    .hl-el { font-weight: 800; }
+    .hl-el-wind { color: #059669; }
+    .hl-el-light { color: #d97706; }
+    .hl-el-thunder { color: #7c3aed; }
+    .hl-el-fire { color: #dc2626; }
+    .hl-el-water { color: #0284c7; }
+    .hl-el-wood { color: #15803d; }
+    .hl-el-earth { color: #92400e; }
+    .hl-el-dark { color: #4338ca; }
+    .hl-num {
+      font-weight: 800;
+      color: var(--brand-blue-deep);
+      background: var(--brand-blue-soft);
+      padding: 0 5px;
+      border-radius: 5px;
+    }
+    .hl-kw {
+      font-weight: 800;
+      color: var(--sev-mid-ink);
+      background: var(--sev-mid-bg);
+      padding: 0 5px;
+      border-radius: 5px;
+    }
+    .source-link-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .source-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface-solid);
+      color: var(--brand-blue-deep);
+      text-decoration: none;
+    }
+    .source-link-btn:hover { background: var(--brand-blue-soft); }
+
+    .bt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 9px;
+    }
+    .bt-card {
+      background: var(--bg-surface-solid);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 11px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .bt-card.is-rec { border-color: var(--border-gold); background: var(--brand-gold-soft); }
+    .loadout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+      gap: 10px;
+    }
+    .loadout-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      background: var(--bg-surface-solid);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+    .loadout-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 11px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      background: var(--brand-blue-soft);
+      border: 1px solid var(--border-subtle);
+      color: var(--brand-blue-deep);
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+    .loadout-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Companion Scrapbook & Daily Diff Timeline */
+    .comp-scrap-drop {
+      border: 1.5px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-solid);
+      padding: 14px 16px;
+      text-align: center;
+      margin-bottom: 12px;
+      transition: border-color 140ms ease, background-color 140ms ease;
+    }
+    .comp-scrap-drop.dragover { border-color: var(--brand-blue); background: var(--brand-blue-soft); }
+    .comp-scrap-thumbs {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 9px;
+      margin-top: 10px;
+    }
+    .comp-scrap-item {
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg-surface-solid);
+      cursor: pointer;
+      position: relative;
+    }
+    .comp-scrap-item.selected { border-color: var(--brand-blue); box-shadow: 0 0 0 2px rgba(75, 99, 242, 0.2); }
+    .comp-scrap-item img { width: 100%; height: 78px; object-fit: cover; display: block; }
+    .comp-scrap-meta { padding: 5px 6px; font-size: 0.7rem; color: var(--ink-muted); font-weight: 700; display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    .diff-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+    .diff-chip {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--sev-ok-bg);
+      color: var(--sev-ok-ink);
+      border: 1px solid var(--sev-ok-bd);
+    }
     .history-list { display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; }
     .history-item {
       padding: 10px 12px;
@@ -1920,13 +2164,20 @@
         </div>
 
         <div class="quick-import-box">
-          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;">
-            <div style="font-size:0.94rem; font-weight:800; color:var(--ink-strong);">스샷 JSON 빠른 반영</div>
-            <button class="btn btn-primary btn-sm" onclick="copyScreenshotPrompt()">추출 프롬프트 복사</button>
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">
+            <div style="font-size:0.95rem; font-weight:800; color:var(--ink-strong);">내 스크랩북 &amp; 스샷 AI 분석 반영</div>
+            <div class="btn-row">
+              <label class="btn btn-sm" style="cursor:pointer;">스샷 추가<input type="file" accept="image/*" style="display:none" onchange="handleCompanionScrapFile(event)" /></label>
+              <button class="btn btn-primary btn-sm" onclick="copyScreenshotPrompt()">AI 분석 프롬프트 복사</button>
+            </div>
           </div>
-          <textarea id="quickJsonInput" placeholder='AI가 스샷에서 추출한 JSON을 붙여넣으세요'></textarea>
+          <div class="comp-scrap-drop" id="compScrapDrop">
+            <div style="font-size:0.83rem; font-weight:700; color:var(--ink-body);">인게임 스샷(캐릭터·재화·키보)을 여기에 드래그하거나 Ctrl+V로 붙여넣으세요 (자동 압축 · 날짜별 로컬 저장)</div>
+            <div class="comp-scrap-thumbs" id="compScrapGallery"></div>
+          </div>
+          <textarea id="quickJsonInput" placeholder='AI가 직전 기록 대비 스샷에서 추출한 JSON을 붙여넣으세요 (저장 시 날짜별 성장 타임라인에 자동 누적됩니다)'></textarea>
           <div class="btn-row">
-            <button class="btn btn-primary btn-sm" onclick="applyQuickJsonImport()">반영하기</button>
+            <button class="btn btn-primary btn-sm" onclick="applyQuickJsonImport()">반영 + 날짜별 기록 저장</button>
             <a class="btn btn-sm" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a>
             <a class="btn btn-sm" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
           </div>
@@ -2008,8 +2259,13 @@
             <label><input type="checkbox" id="aiIncChars" checked onchange="refreshAIPreview()" /> 보유 캐릭터</label>
             <label><input type="checkbox" id="aiIncResources" checked onchange="refreshAIPreview()" /> 재화·진행도·목표</label>
             <label><input type="checkbox" id="aiIncRoutines" checked onchange="refreshAIPreview()" /> 미완료 루틴·쿠폰</label>
-            <label><input type="checkbox" id="aiIncHistory" checked onchange="refreshAIPreview()" /> 성장 기록</label>
+            <label><input type="checkbox" id="aiIncHistory" checked onchange="refreshAIPreview()" /> 날짜별 성장 히스토리</label>
+            <label><input type="checkbox" id="aiIncConsultMemo" checked onchange="refreshAIPreview()" /> 직전 상담 메모</label>
             <label><input type="checkbox" id="aiIncCommonDB" checked onchange="refreshAIPreview()" /> 게임 DB·이슈</label>
+          </div>
+          <div class="field" style="margin-bottom: 10px;">
+            <label for="aiLastConsultMemo">직전 상담 메모 (이전 AI 조언 핵심 요약 · 새 창 연속 상담용)</label>
+            <input type="text" id="aiLastConsultMemo" placeholder="예: 이번 주 도산소옥 60렙 우선, 상시 5성 선택권은 30연 후 사용" onchange="saveLastConsultMemo()" oninput="refreshAIPreview()" />
           </div>
           <div class="field">
             <label for="aiQuestionInput">질문</label>
@@ -2689,6 +2945,217 @@
       `).join("");
     }
 
+    const CHAR_SLUG_MAP = {
+      "도산소옥": "tushan", "모르윈": "morwyn", "루비": "ruby", "샬레": "shalle",
+      "페페": "pepe", "루루카": "luluka", "멧사": "metsa", "애니스": "anais"
+    };
+
+    function getCharSlug(name) {
+      const clean = String(name || "").trim();
+      for (const [k, v] of Object.entries(CHAR_SLUG_MAP)) {
+        if (clean.includes(k)) return v;
+      }
+      return clean.toLowerCase().replace(/[^a-z0-9]/g, "") || "char";
+    }
+
+    function extractSourceLinks(text) {
+      const urls = [];
+      let cleaned = String(text || "").replace(/\(?\s*출처\s*:\s*(https?:\/\/[^\s)]+)\s*\)?/gi, (_, u) => {
+        urls.push(u.trim());
+        return "";
+      });
+      cleaned = cleaned.replace(/\s{2,}/g, " ").trim();
+      return { text: cleaned, urls };
+    }
+
+    function highlightGameText(rawText) {
+      let s = escapeHtml(rawText || "");
+      const elMap = [
+        ["바람", "hl-el-wind"], ["빛", "hl-el-light"], ["번개", "hl-el-thunder"],
+        ["불", "hl-el-fire"], ["물", "hl-el-water"], ["나무", "hl-el-wood"],
+        ["땅", "hl-el-earth"], ["어둠", "hl-el-dark"]
+      ];
+      elMap.forEach(([word, cls]) => {
+        const re = new RegExp(`(${word})(?=\\s*(?:속성|각인|피해|파티|초월|초한|원소|공격|·|/|\\)|\\b))`, "g");
+        s = s.replace(re, `<span class="hl-el ${cls}">$1</span>`);
+      });
+      s = s.replace(/([+-]?\d+(?:,\d{3})*(?:\.\d+)?\s*(?:%|pt|개|회|초|스택|중첩|단계))/gi, `<span class="hl-num">$1</span>`);
+      const kws = ["초한 피해", "초월 피해", "방어력 감소", "치명타", "인연 강화", "검증 중"];
+      kws.forEach(kw => {
+        s = s.replace(new RegExp(kw, "g"), `<span class="hl-kw">${kw}</span>`);
+      });
+      return s;
+    }
+
+    function getSkillBadgeMeta(title, idx) {
+      const t = String(title || "");
+      if (t.includes("일반") || t.includes("평타")) return { label: "일반", color: "#4b63f2" };
+      if (t.includes("강공") || t.includes("차지")) return { label: "강공", color: "#0ea5e9" };
+      if (t.includes("궁극") || t.includes("필살")) return { label: "궁극", color: "#d97706" };
+      if (t.includes("성명") || t.includes("스킬")) return { label: "스킬", color: "#7c3aed" };
+      if (t.includes("패시브") || t.includes("특성") || t.includes("인연")) return { label: "특성", color: "#059669" };
+      return { label: `S${idx + 1}`, color: "#4b63f2" };
+    }
+
+    function renderSkillsSectionHtml(c) {
+      const raw = String(c.Skills || "").trim();
+      if (!raw) return "";
+      const { text: noUrlText, urls } = extractSourceLinks(raw);
+      const parts = noUrlText.split(/\s*\|\s*/).map(p => p.trim()).filter(Boolean);
+      const charSlug = getCharSlug(c.Name);
+      const summaryLine = (c.Summary || parts[0] || "").trim();
+
+      const cardsHtml = parts.map((part, idx) => {
+        let title = `스킬 ${idx + 1}`;
+        let desc = part;
+        const bracketMatch = part.match(/^\[([^\]]+)\]\s*(.*)$/);
+        if (bracketMatch) {
+          title = bracketMatch[1].trim();
+          desc = bracketMatch[2].trim() || part;
+        } else {
+          const colonIdx = part.indexOf(":");
+          if (colonIdx > 0 && colonIdx < 24) {
+            title = part.slice(0, colonIdx).trim();
+            desc = part.slice(colonIdx + 1).trim();
+          }
+        }
+        const meta = getSkillBadgeMeta(title, idx);
+        const iconPath = `./assets/skills/${charSlug}_${idx + 1}.webp`;
+        return `
+          <div class="skill-row-card">
+            <div class="skill-icon-slot">
+              <img src="${iconPath}" alt="${escapeHtml(title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+              <div class="skill-icon-fallback" style="display:none; background:${meta.color};">${meta.label}</div>
+            </div>
+            <div class="skill-row-body">
+              <div class="skill-row-title">${escapeHtml(title)}</div>
+              <div class="skill-row-desc">${highlightGameText(desc)}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const sourceHtml = urls.length
+        ? `<div class="source-link-row">${urls.map(u => `<a class="source-link-btn" href="${escapeHtml(u)}" target="_blank" rel="noopener">출처 보기 ↗</a>`).join("")}</div>`
+        : "";
+
+      return `
+        <div class="guide-section">
+          <div class="guide-section-title">핵심 스킬 &amp; 전투 메커니즘</div>
+          <div class="skill-summary-callout">핵심 요약: ${highlightGameText(summaryLine)}</div>
+          <div class="skill-list">${cardsHtml}</div>
+          ${sourceHtml}
+        </div>
+      `;
+    }
+
+    function renderBreakthroughSectionHtml(c) {
+      const raw = String(c.Breakthrough || "").trim();
+      if (!raw) {
+        return `
+          <div class="guide-section">
+            <div class="guide-section-title">돌파 (정현 1~6단계)</div>
+            <div class="pending-box">정현 1~6단계 돌파 상세 효과는 현재 <strong>검증 중</strong>입니다. 시트 <code>Breakthrough</code> 열에 <code>|</code>로 구분해 입력하면 자동으로 카드 표시됩니다.</div>
+          </div>
+        `;
+      }
+      const { text: cleanRaw, urls } = extractSourceLinks(raw);
+      const items = cleanRaw.split(/\s*\|\s*/).map(s => s.trim()).filter(Boolean);
+      const cardsHtml = items.map((item, idx) => {
+        const isRec = /추천|핵심|필수|명함|최우선/.test(item);
+        return `
+          <div class="bt-card ${isRec ? "is-rec" : ""}">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+              <span class="pill ${isRec ? "pill-t0" : "pill-rec"}">${idx + 1}단계</span>
+              ${isRec ? `<span class="pill pill-must">핵심 추천</span>` : ""}
+            </div>
+            <div style="font-size:0.83rem; color:var(--ink-body); line-height:1.55;">${highlightGameText(item)}</div>
+          </div>
+        `;
+      }).join("");
+      const sourceHtml = urls.length
+        ? `<div class="source-link-row">${urls.map(u => `<a class="source-link-btn" href="${escapeHtml(u)}" target="_blank" rel="noopener">출처 보기 ↗</a>`).join("")}</div>`
+        : "";
+      return `
+        <div class="guide-section">
+          <div class="guide-section-title">돌파 (정현 1~6단계)</div>
+          <div class="bt-grid">${cardsHtml}</div>
+          ${sourceHtml}
+        </div>
+      `;
+    }
+
+    function renderLoadoutSectionHtml(c) {
+      const raw = String(c.Loadout || c.BuildNote || "").trim();
+      if (!raw) {
+        return `
+          <div class="guide-section">
+            <div class="guide-section-title">추천 영자 · 장비 · 키보 세팅</div>
+            <div class="pending-box">추천 세팅 데이터는 현재 <strong>검증 중</strong>입니다.</div>
+          </div>
+        `;
+      }
+      const { text: cleanRaw, urls } = extractSourceLinks(raw);
+      const parts = cleanRaw.split(/\s*(?:\||\n)\s*/).map(s => s.trim()).filter(Boolean);
+      const cardsHtml = parts.map((part, idx) => {
+        let cat = "세팅";
+        let name = part;
+        let effect = "";
+        let folder = "gear";
+        let slug = `item_${idx + 1}`;
+
+        const tagMatch = part.match(/^\[([^\]]+)\]\s*(.*)$/);
+        if (tagMatch) {
+          cat = tagMatch[1].trim();
+          const rest = tagMatch[2].trim();
+          const sep = rest.indexOf(":");
+          if (sep !== -1) {
+            name = rest.slice(0, sep).trim();
+            effect = rest.slice(sep + 1).trim();
+          } else {
+            name = rest;
+          }
+        } else {
+          if (part.includes("키보")) cat = "키보";
+          else if (part.includes("영자") || part.includes("무기")) cat = "영자";
+          else if (part.includes("장비") || part.includes("세트") || part.includes("옵션")) cat = "장비";
+          const sep = part.indexOf(":");
+          if (sep !== -1 && sep < 28) {
+            name = part.slice(0, sep).trim();
+            effect = part.slice(sep + 1).trim();
+          }
+        }
+
+        if (cat.includes("키보")) folder = "kibo";
+        slug = name.toLowerCase().replace(/[^a-z0-9]/g, "") || `slot_${idx + 1}`;
+        const imgPath = `./assets/${folder}/${slug}.webp`;
+        const catCls = cat.includes("키보") ? "pill-free" : (cat.includes("영자") ? "pill-t0" : "pill-rec");
+        return `
+          <div class="loadout-card">
+            <div class="loadout-thumb">
+              <img src="${imgPath}" alt="${escapeHtml(name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <span style="display:none;">${escapeHtml(cat.slice(0, 2))}</span>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <div style="margin-bottom:4px;"><span class="pill ${catCls}">${escapeHtml(cat)}</span></div>
+              <div style="font-size:0.88rem; font-weight:800; color:var(--ink-strong); margin-bottom:2px;">${highlightGameText(name)}</div>
+              ${effect ? `<div style="font-size:0.81rem; color:var(--ink-body); line-height:1.5;">${highlightGameText(effect)}</div>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+      const sourceHtml = urls.length
+        ? `<div class="source-link-row">${urls.map(u => `<a class="source-link-btn" href="${escapeHtml(u)}" target="_blank" rel="noopener">출처 보기 ↗</a>`).join("")}</div>`
+        : "";
+      return `
+        <div class="guide-section">
+          <div class="guide-section-title">추천 영자 · 장비 · 키보 세팅</div>
+          <div class="loadout-grid">${cardsHtml}</div>
+          ${sourceHtml}
+        </div>
+      `;
+    }
+
     function openCharModal(charIdx) {
       const rows = DB.Tier_Characters || [];
       const c = rows[charIdx];
@@ -2711,21 +3178,21 @@
 
       let detailBlocks = "";
       if (c.Story && c.Story.trim()) {
-        detailBlocks += `<div class="guide-section"><div class="guide-section-title">배경 스토리 &amp; 설정</div><div class="guide-section-body">${escapeHtml(c.Story)}</div></div>`;
+        const st = extractSourceLinks(c.Story);
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">배경 스토리 &amp; 설정</div><div class="guide-section-body">${highlightGameText(st.text)}</div>${st.urls.length ? `<div class="source-link-row">${st.urls.map(u => `<a class="source-link-btn" href="${escapeHtml(u)}" target="_blank" rel="noopener">출처 보기 ↗</a>`).join("")}</div>` : ""}</div>`;
       }
       if (c.StatsNote && c.StatsNote.trim()) {
-        detailBlocks += `<div class="guide-section"><div class="guide-section-title">스펙 &amp; 포지션 특징</div><div class="guide-section-body">${escapeHtml(c.StatsNote)}</div></div>`;
+        const sn = extractSourceLinks(c.StatsNote);
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">스펙 &amp; 포지션 특징</div><div class="guide-section-body">${highlightGameText(sn.text)}</div></div>`;
       }
-      if (c.Skills && c.Skills.trim()) {
-        detailBlocks += `<div class="guide-section"><div class="guide-section-title">핵심 스킬 &amp; 전투 메커니즘</div><div class="guide-section-body">${escapeHtml(c.Skills)}</div></div>`;
-      }
+      detailBlocks += renderSkillsSectionHtml(c);
+      detailBlocks += renderBreakthroughSectionHtml(c);
       if ((c.CombatTips && c.CombatTips.trim()) || (c.Synergy && c.Synergy.trim())) {
-        const tipBody = [c.CombatTips, c.Synergy ? `추천 시너지: ${c.Synergy}` : ""].filter(Boolean).join("\n\n");
-        detailBlocks += `<div class="guide-section"><div class="guide-section-title">실전 운용 팁 &amp; 조합</div><div class="guide-section-body">${escapeHtml(tipBody)}</div></div>`;
+        const tipRaw = [c.CombatTips, c.Synergy ? `추천 시너지: ${c.Synergy}` : ""].filter(Boolean).join("\n\n");
+        const tp = extractSourceLinks(tipRaw);
+        detailBlocks += `<div class="guide-section"><div class="guide-section-title">실전 운용 팁 &amp; 조합</div><div class="guide-section-body">${highlightGameText(tp.text)}</div>${tp.urls.length ? `<div class="source-link-row">${tp.urls.map(u => `<a class="source-link-btn" href="${escapeHtml(u)}" target="_blank" rel="noopener">출처 보기 ↗</a>`).join("")}</div>` : ""}</div>`;
       }
-      if (c.BuildNote && c.BuildNote.trim()) {
-        detailBlocks += `<div class="guide-section"><div class="guide-section-title">추천 영자 · 장비 · 키보 세팅</div><div class="guide-section-body">${escapeHtml(c.BuildNote)}</div></div>`;
-      }
+      detailBlocks += renderLoadoutSectionHtml(c);
 
       document.getElementById("guideModalContent").innerHTML = `
         <div class="guide-modal-head">
@@ -2753,37 +3220,54 @@
       document.getElementById("guideModal").classList.add("open");
     }
 
+    function matchesRarityFilter(row, filterVal) {
+      if (filterVal === "전체") return true;
+      const rarity = String(row.Rarity || "");
+      const tier = String(row.Tier || "");
+      if (filterVal === "5성") return rarity.includes("5성") || (!rarity && !tier.includes("4성"));
+      if (filterVal === "4성") return rarity.includes("4성") || (!rarity && tier.includes("4성"));
+      return true;
+    }
+
     function renderTier() {
       const all = DB.Tier_Characters || [];
-      const tiers = ["전체", ...Array.from(new Set(all.map(r => r.Tier).filter(Boolean)))];
-      document.getElementById("tierFilters").innerHTML = tiers.map(t => `<button class="chip ${activeTierFilter === t ? "active" : ""}" onclick="activeTierFilter='${escapeHtml(t)}'; renderTier();">${escapeHtml(t)}</button>`).join("");
+      const rarityFilters = ["전체", "5성", "4성"];
+      if (!rarityFilters.includes(activeTierFilter)) activeTierFilter = "전체";
+      document.getElementById("tierFilters").innerHTML = rarityFilters.map(t => `<button class="chip ${activeTierFilter === t ? "active" : ""}" onclick="activeTierFilter='${t}'; renderTier();">${t}</button>`).join("");
       const indexed = all.map((r, idx) => ({ ...r, __idx: idx }));
-      const rows = indexed.filter(r => activeTierFilter === "전체" || r.Tier === activeTierFilter);
+      const rows = indexed.filter(r => matchesRarityFilter(r, activeTierFilter));
       document.getElementById("tierGrid").innerHTML = rows.map(r => {
         const t = r.Tier || "";
+        const rarityLabel = String(r.Rarity || (t.includes("4성") ? "4성" : "5성")).includes("4성") ? "4성" : "5성";
         const pillCls = t.includes("T0") ? "pill-t0" : (t.includes("T1") ? "pill-t1" : (t.includes("무료") ? "pill-free" : "pill-4s"));
         const isT0 = t.includes("T0");
         const hasProfile = Boolean(r.Story || r.Weapon || r.CombatTips);
-        const fallbackHtml = makeCharFallbackHtml(r.Name, r.Element, `${r.Element} / ${r.Role}`);
-        const mediaHtml = r.ImageURL
-          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div style="display:none; width:100%;">${fallbackHtml}</div>`
-          : fallbackHtml;
+        const initial = escapeHtml(String(r.Name || "?").trim().charAt(0) || "?");
+        const elColor = getElementColor(r.Element);
+        const fallbackCircle = `<div class="char-fallback-circle" style="background:${elColor};">${initial}</div>`;
+        const thumbHtml = r.ImageURL
+          ? `<img src="${escapeHtml(r.ImageURL)}" alt="${escapeHtml(r.Name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" /><div class="char-fallback-circle" style="display:none; background:${elColor};">${initial}</div>`
+          : fallbackCircle;
         return `
           <article class="entity-card clickable ${isT0 ? "tier-t0" : ""}" onclick="openCharModal(${r.__idx})" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCharModal(${r.__idx});}">
-            <div class="entity-media">
-              ${mediaHtml}
-              <div class="media-badges">
-                <span class="pill ${pillCls}">${escapeHtml(t)}</span>
-                <span class="pill media-badge-dark">${escapeHtml(r.Element)} / ${escapeHtml(r.Role)}</span>
+            <div class="char-card-head">
+              <div class="char-card-thumb">${thumbHtml}</div>
+              <div class="char-card-head-info">
+                <div class="char-card-badges">
+                  <span class="pill ${pillCls}">${escapeHtml(t)}</span>
+                  <span class="pill pill-cat">${rarityLabel}</span>
+                  <span class="pill pill-rec">${escapeHtml(r.Element)}</span>
+                </div>
+                <div class="entity-name">${escapeHtml(r.Name)}</div>
+                <div style="font-size:0.79rem; color:var(--ink-muted); font-weight:600;">${escapeHtml(r.Role)}</div>
+                <div class="entity-source">획득처: ${escapeHtml(r.Source)}</div>
               </div>
             </div>
             <div class="entity-body">
-              <div class="entity-name">${escapeHtml(r.Name)}</div>
-              <div class="entity-source">획득처: ${escapeHtml(r.Source)}</div>
               <div class="entity-desc">${escapeHtml(r.Summary)}</div>
               ${r.Synergy ? `<div class="entity-synergy">시너지: ${escapeHtml(r.Synergy)}</div>` : ""}
               <div class="entity-more-bar">
-                <span>${hasProfile ? "상세 프로필 등록됨" : "기본 프로필"}</span>
+                <span>${hasProfile ? "상세 도감 등록됨" : "기본 프로필"}</span>
                 <span>프로필 열기 →</span>
               </div>
             </div>
@@ -2891,6 +3375,7 @@
       setVal("pfRedstone", p.redstone);
       setVal("pfCurrentGoal", p.currentGoal);
       setVal("pfMemo", p.memo);
+      setVal("aiLastConsultMemo", personalState.lastConsultMemo);
       const badge = document.getElementById("profileUpdatedBadge");
       if (badge) {
         badge.textContent = p.updatedAt
@@ -2928,26 +3413,29 @@
     }
 
     function renderGrowthHistory() {
-      const list = personalState.growthHistory || [];
+      const list = personalState.history || personalState.growthHistory || [];
       const badge = document.getElementById("historyCountBadge");
       if (badge) badge.textContent = list.length + "건";
       const el = document.getElementById("growthHistoryList");
       if (!el) return;
       el.innerHTML = list.map(h => {
-        const dt = new Date(h.recordedAt).toLocaleString("ko-KR");
+        const dt = h.date || new Date(h.recordedAt).toLocaleDateString("ko-KR");
+        const tm = new Date(h.recordedAt).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
         const s = h.snapshot || {};
+        const diffs = Array.isArray(h.diffs) ? h.diffs : [];
         return `
           <div class="history-item">
-            <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:3px;">
+            <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:3px; flex-wrap:wrap;">
               <strong style="color:var(--ink-strong);">${escapeHtml(h.note)}</strong>
-              <span style="font-size:0.74rem; color:var(--ink-muted);">${escapeHtml(dt)}</span>
+              <span class="pill pill-cat">${escapeHtml(dt)} ${escapeHtml(tm)}</span>
             </div>
             <div style="color:var(--ink-body); font-size:0.79rem;">
               계정Lv: ${s.accountLevel ?? "미입력"} / 보유: ${s.ownedCount ?? 0}명 / 빛의 기억: ${s.lightMemory ?? "미입력"} / 목표: ${escapeHtml(s.currentGoal || "미입력")}
             </div>
+            ${diffs.length ? `<div class="diff-chips">${diffs.map(d => `<span class="diff-chip">${escapeHtml(d)}</span>`).join("")}</div>` : ""}
           </div>
         `;
-      }).join("") || `<p style="color:var(--ink-muted); font-size:0.84rem;">아직 성장 이력이 없습니다. [성장 이력 스냅샷 남기기]로 기록을 쌓아보세요.</p>`;
+      }).join("") || `<p style="color:var(--ink-muted); font-size:0.84rem;">아직 성장 이력이 없습니다. 스샷 JSON을 반영하거나 [스냅샷 기록]으로 날짜별 변화를 남겨보세요.</p>`;
     }
 
     function toggleOwnedChar(charId, charName) {
@@ -3026,13 +3514,24 @@
       }).join("");
     }
 
+    function saveLastConsultMemo() {
+      const el = document.getElementById("aiLastConsultMemo");
+      if (!el) return;
+      personalState.lastConsultMemo = el.value.trim();
+      window.APPersonalStore.saveState(personalState);
+      refreshAIPreview();
+    }
+
     function getAIConsultOptions() {
+      const memoEl = document.getElementById("aiLastConsultMemo");
+      if (memoEl) personalState.lastConsultMemo = memoEl.value.trim();
       return {
         question: (document.getElementById("aiQuestionInput") || {}).value || "",
         includeChars: Boolean((document.getElementById("aiIncChars") || {}).checked),
         includeResources: Boolean((document.getElementById("aiIncResources") || {}).checked),
         includeRoutines: Boolean((document.getElementById("aiIncRoutines") || {}).checked),
         includeHistory: Boolean((document.getElementById("aiIncHistory") || {}).checked),
+        includeConsultMemo: Boolean((document.getElementById("aiIncConsultMemo") || {}).checked),
         includeCommonDB: Boolean((document.getElementById("aiIncCommonDB") || {}).checked)
       };
     }
@@ -3075,22 +3574,8 @@
     }
 
     function copyScreenshotPrompt() {
-      const promptText = [
-        "첨부한 아주르 프로밀리아 인게임 스크린샷에서 확인되는 정보만 읽어서 아래 JSON 형식으로만 출력해 줘.",
-        "규칙: 화면에 안 보이는 숫자는 절대 0으로 적지 말고 반드시 null로 남겨 줘. 설명 없이 순수 JSON만 출력해 줘.",
-        "",
-        "{",
-        '  "accountLevel": null,',
-        '  "storyProgress": "",',
-        '  "lightMemory": null,',
-        '  "starMemory": null,',
-        '  "redstone": null,',
-        '  "ownedCharacters": [',
-        '    { "name": "캐릭터명", "level": null, "breakthrough": null, "note": "" }',
-        "  ]",
-        "}"
-      ].join("\n");
-      navigator.clipboard.writeText(promptText).then(() => showToast("스샷 추출용 프롬프트를 복사했습니다. Gemini/ChatGPT에 스샷과 함께 붙여넣으세요."));
+      const promptText = window.APAIConsult.buildScreenshotDiffPrompt(personalState);
+      navigator.clipboard.writeText(promptText).then(() => showToast("직전 기록 비교용 AI 스샷 분석 프롬프트를 복사했습니다. Gemini/ChatGPT에 스샷과 함께 붙여넣으세요."));
     }
 
     function applyQuickJsonImport() {
@@ -3125,12 +3610,13 @@
           });
         }
 
-        store.saveState(personalState);
+        const entry = store.recordGrowthSnapshot(personalState, parsed.note || "스샷 분석 자동 기록");
         document.getElementById("quickJsonInput").value = "";
         renderProfileForm();
         renderOwnedChars();
+        renderGrowthHistory();
         refreshAIPreview();
-        showToast(`자동 반영 완료! (캐릭터 ${charUpdated}명 업데이트됨)`);
+        showToast(`반영 & 날짜별 기록 완료! (${entry.diffs.slice(0, 2).join(", ")})`);
       } catch (err) {
         showToast("JSON 형식을 인식하지 못했습니다. 중괄호 { ... } 전체를 붙여넣어 주세요.");
       }
@@ -3190,21 +3676,72 @@
       } catch (e) {}
     }
 
-    function saveScrap(dataUrl) {
+    let selectedScrapId = null;
+
+    function compressImageBlob(blob, maxWidth = 1280) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            const scale = img.width > maxWidth ? (maxWidth / img.width) : 1;
+            const w = Math.round(img.width * scale);
+            const h = Math.round(img.height * scale);
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, w, h);
+            let out = "";
+            try { out = canvas.toDataURL("image/webp", 0.82); } catch (e) {}
+            if (!out || !out.startsWith("data:image/webp")) {
+              out = canvas.toDataURL("image/jpeg", 0.82);
+            }
+            resolve(out);
+          };
+          img.onerror = () => resolve(ev.target.result);
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    function saveScrap(dataUrl, customCategory) {
       if (!scrapDB) return;
       const titleInput = document.getElementById("scrapTitle");
       const catInput = document.getElementById("scrapCat");
-      const item = { id: Date.now(), title: titleInput.value.trim() || ("캡처 자료 " + new Date().toLocaleTimeString("ko-KR", { hour:"2-digit", minute:"2-digit" })), category: catInput.value, image: dataUrl, createdAt: new Date().toLocaleDateString("ko-KR") };
+      const todayYMD = window.APPersonalStore.getTodayKSTDateStr();
+      const item = {
+        id: Date.now(),
+        title: (titleInput && titleInput.value.trim()) || ("인게임 스샷 " + new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })),
+        category: customCategory || (catInput ? catInput.value : "계정 현황"),
+        image: dataUrl,
+        date: todayYMD,
+        createdAt: todayYMD
+      };
       const tx = scrapDB.transaction("scraps", "readwrite");
       tx.objectStore("scraps").add(item);
-      tx.oncomplete = () => { titleInput.value = ""; renderScraps(); showToast("스크랩북에 저장되었습니다."); };
+      tx.oncomplete = () => {
+        if (titleInput) titleInput.value = "";
+        selectedScrapId = item.id;
+        renderScraps();
+        showToast(`스샷을 날짜별(${todayYMD}) 스크랩북에 자동 압축 저장했습니다.`);
+      };
     }
 
     function deleteScrap(id) {
       if (!scrapDB) return;
       const tx = scrapDB.transaction("scraps", "readwrite");
       tx.objectStore("scraps").delete(id);
-      tx.oncomplete = () => renderScraps();
+      tx.oncomplete = () => {
+        if (selectedScrapId === id) selectedScrapId = null;
+        renderScraps();
+      };
+    }
+
+    function selectCompanionScrap(id) {
+      selectedScrapId = id;
+      renderScraps();
     }
 
     function renderScraps() {
@@ -3213,33 +3750,65 @@
       const req = tx.objectStore("scraps").getAll();
       req.onsuccess = () => {
         const items = (req.result || []).sort((a, b) => b.id - a.id);
-        document.getElementById("scrapGrid").innerHTML = items.map(it => `
-          <div class="scrap-card">
-            <img src="${it.image}" alt="${escapeHtml(it.title)}" onclick="openLightbox('${it.image}')" />
-            <div class="scrap-body">
-              <div style="min-width:0;">
-                <span class="pill pill-cat" style="margin-bottom:4px;">${escapeHtml(it.category)}</span>
-                <div style="font-size:0.88rem; font-weight:700; color:var(--ink-strong);">${escapeHtml(it.title)}</div>
+        const grid = document.getElementById("scrapGrid");
+        if (grid) {
+          grid.innerHTML = items.map(it => `
+            <div class="scrap-card">
+              <img src="${it.image}" alt="${escapeHtml(it.title)}" onclick="openLightbox('${it.image}')" />
+              <div class="scrap-body">
+                <div style="min-width:0;">
+                  <span class="pill pill-cat" style="margin-bottom:4px;">${escapeHtml(it.date || it.createdAt || "")} · ${escapeHtml(it.category)}</span>
+                  <div style="font-size:0.88rem; font-weight:700; color:var(--ink-strong);">${escapeHtml(it.title)}</div>
+                </div>
+                <button class="del-btn" onclick="deleteScrap(${it.id})">삭제</button>
               </div>
-              <button class="del-btn" onclick="deleteScrap(${it.id})">삭제</button>
             </div>
-          </div>
-        `).join("") || `<p style="color:var(--ink-muted); grid-column:1/-1; text-align:center; padding:24px;">아직 저장된 캡처가 없습니다. 공략 이미지를 복사한 뒤 이 탭에서 Ctrl+V 해보세요.</p>`;
+          `).join("") || `<p style="color:var(--ink-muted); grid-column:1/-1; text-align:center; padding:24px;">아직 저장된 캡처가 없습니다. 공략 이미지를 복사한 뒤 이 탭에서 Ctrl+V 해보세요.</p>`;
+        }
+
+        const compGallery = document.getElementById("compScrapGallery");
+        if (compGallery) {
+          compGallery.innerHTML = items.slice(0, 8).map(it => `
+            <div class="comp-scrap-item ${selectedScrapId === it.id ? "selected" : ""}" onclick="selectCompanionScrap(${it.id})">
+              <img src="${it.image}" alt="${escapeHtml(it.title)}" ondblclick="openLightbox('${it.image}')" title="클릭 선택 · 더블클릭 확대" />
+              <div class="comp-scrap-meta">
+                <span>${escapeHtml(it.date || it.createdAt || "")}</span>
+                <button type="button" style="border:none; background:transparent; color:var(--sev-high-ink); cursor:pointer; font-weight:800;" onclick="event.stopPropagation(); deleteScrap(${it.id})">✕</button>
+              </div>
+            </div>
+          `).join("");
+        }
       };
     }
 
     function openLightbox(src) { document.getElementById("lightboxImg").src = src; document.getElementById("lightbox").classList.add("open"); }
-    function handleFileUpload(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => saveScrap(ev.target.result); reader.readAsDataURL(file); }
+    function handleFileUpload(e) { const file = e.target.files[0]; if (!file) return; compressImageBlob(file).then(url => saveScrap(url)); e.target.value = ""; }
+    function handleCompanionScrapFile(e) { const file = e.target.files[0]; if (!file) return; compressImageBlob(file).then(url => saveScrap(url, "계정 스샷")); e.target.value = ""; }
+
+    (function bindCompanionDropZone() {
+      const dz = document.getElementById("compScrapDrop");
+      if (!dz) return;
+      dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+      dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+      dz.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dz.classList.remove("dragover");
+        const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && file.type && file.type.startsWith("image/")) {
+          compressImageBlob(file).then(url => saveScrap(url, "계정 스샷"));
+        }
+      });
+    })();
 
     window.addEventListener("paste", (e) => {
-      if (!document.getElementById("panel-scrap").classList.contains("active")) return;
+      const isScrapActive = document.getElementById("panel-scrap").classList.contains("active");
+      const isCompActive = document.getElementById("panel-companion").classList.contains("active");
+      if (!isScrapActive && !isCompActive) return;
       const items = (e.clipboardData || {}).items || [];
       for (const it of items) {
         if (it.type && it.type.startsWith("image/")) {
           const blob = it.getAsFile();
-          const reader = new FileReader();
-          reader.onload = (ev) => saveScrap(ev.target.result);
-          reader.readAsDataURL(blob);
+          compressImageBlob(blob).then(url => saveScrap(url, isCompActive ? "계정 스샷" : null));
           e.preventDefault();
           break;
         }
